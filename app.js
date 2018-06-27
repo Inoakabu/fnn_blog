@@ -68,16 +68,15 @@ app.post('/updatePost', (req,res) => {
 app.post('/deletePost', (req,res) => {
     console.log(req.body)
     db.collection('fnn_blog')
-    .deleteOne(
+    .findOneAndDelete(
         {
-            blogposttitle: req.body[findDeleteBlogPost]
+            blogposttitle: req.body.deleteBlogPost
         },
         (err,result) => {
             if (err) return res.send(500, err)
-            console.log('deleted: '+result)
+            console.log('deleted:')
         }
     )
-    console.log('deleted')
     res.redirect('/')
 })
 

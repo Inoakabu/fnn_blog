@@ -22,7 +22,7 @@ update.addEventListener('click',function(){
 })
 
 var del = document.getElementById('delete')
-
+console.log(del)
 del.addEventListener('click',function(){
     console.log('was clicked')
     fetch('deletePost',{
@@ -38,7 +38,7 @@ del.addEventListener('click',function(){
         if(res.ok) return res.json()
     })
     .then(data => {
-        console.log(data)
+        console.log("From Fetch: "+data)
         window.location.reload()
     })
 })
