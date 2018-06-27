@@ -26,34 +26,32 @@
                 </form>
 
                 <% for(var i=0; i<fnn_blog.length; i++) {%>
-                    <div class="fnn_blog">
-                        <form name = "updateForm" >
-                            <form name = "deleteForm" method="POST" action = "/deletePost">
-                                        <h3><%= fnn_blog[i].blogposttitle %></h3>
-                                        <p><%= fnn_blog[i].blogpost %></p>
-                                <input type="text" name="deleteBlogPost" value="<%= fnn_blog[i].blogposttitle %>">
-                                <button id="delete"> Delete </button>
+                        <div class="fnn_blog">
+                            <div>
+                                <h3><%= fnn_blog[i].blogposttitle %></h3>
+                                <p><%= fnn_blog[i].blogpost %></p>
+                                <p><%= fnn_blog[i].uid %></p>
+                            </div>
+                            <form name="deleteForm" method="POST" action="/deletePost">
+                                <input type="text" name="deleteBlogPost" value="<%= fnn_blog[i].uid %>" style="display: none"/>
+                                <button>Delete</button>
                             </form>
-                            <button id="updateModal-Btn"> Update </button>
-                            <div id="updateModal" class="modal">
-                                <div class="updateModal-content">
-                                    <span class="close">&times;</span>
-                                    <form name = "updateForm" method="POST" action = "/updatePost">
-                                        <table>
-                                        <tr>
-                                            <td><input type="hidden" name="findBlogPost" value="<%= fnn_blog[i].blogposttitle %>"></td>
-                                        </tr>
-                                            <td>Update:</td>
-                                            <td><input typ="text" name="replaceBlogPostTitle"></td>
-                                            <td><input typ="text" name="replaceBlogPost"></td>
-                                        <tr>
-                                            <button id="update"> Update </button>
-                                        </tr>
-                                        </table>
-                                    </form>
+                            <div>
+                                <button id="updateModal-Btn" data-id="<%= fnn_blog[i].uid %>">Update</button>
+                                <div id="updateModal" class="modal" data-modal="<%= fnn_blog[i].uid %>">
+                                    <div class="updateModal-content">
+                                    <h3><%= fnn_blog[i].blogposttitle %></h3>
+                                        <span class="close" data-modal-close="<%= fnn_blog[i].uid %>">&times;</span>
+                                        <form name = "updateForm" method="POST" action="/updatePost">
+                                            <input type="text" name="findBlogPost" value="<%= fnn_blog[i].uid %>" style="display: none"/>
+                                            <p><b>Update:</b></p>
+                                            <input typ="text" name="replaceBlogPostTitle" value="<%= fnn_blog[i].blogposttitle %>"/>
+                                            <input typ="text" name="replaceBlogPost" value="<%= fnn_blog[i].blogpost %>"/>
+                                            <button> Update </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </form>
                     </div>
                 <% } %>
             </div>
@@ -72,34 +70,6 @@
                     </div>
                 </div>
         </div>
-
-        <form name = "updateForm" method="POST" action = "/updatePost">
-            <table>
-            <tr>
-                <td>Find:</td>
-                <td><input type="text" name="findBlogPost"></td>
-            </tr>
-                <td>Replace:</td>
-                <td><input typ="text" name="replaceBlogPostTitle"></td>
-                <td><input typ="text" name="replaceBlogPost"></td>
-            <tr>
-                <button id="update"> Update </button>
-            </tr>
-            </table>
-        </form>
-
-        <!-- <form name = "deleteForm" method="POST" action = "/deletePost">
-            <table>
-            <tr>
-                <td>Delete:</td>
-                <td><input type="text" name="deleteBlogPost"></td>
-                <button id="delete"> Delete </button>
-            </tr>
-            </table>
-        </form> -->
-
-        <!-- ... -->
-        <script src="main.js"></script>
         <script src="modal.js"></script>
     </body>
 </html>
