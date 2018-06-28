@@ -31,9 +31,10 @@ app.get('/', (req, res) => {
     .sort({_id:-1})
     .toArray((err,result) => {
         if (err) return console.log(err)
-
+        console.log(result);
         res.render('index.ejs', {fnn_blog: result})
     })
+    db.close;
 });
 
 app.get('/comment',(req,res)=>{
@@ -44,14 +45,15 @@ app.get('/comment',(req,res)=>{
                 from: 'fnn_blog_comment',
                 localField: 'uid',
                 foreignField: 'linkid',
-                as: 'comment'
+                as: 'comments'
             }
         }
     ])
-    .toArray((err,result)=>{
+    .toArray(function(err,result){
         if(err) return console.log(err)
-        //console.log(JSON.stringify(result));
-        res.render('comment.ejs', {post: result})
+        console.log(JSON.stringify(result));
+        res.render('comment.ejs', {comment: result})
+        db.close;
     })
 });
 
@@ -68,9 +70,10 @@ app.post('/addpost', (req,res) => {
     },(err,result)=>{
         if (err) return console.log(err)
 
-        console.log('saved: '+result)
+        console.log('saved')
         res.redirect('/')
     })
+    db.close;
 });
 
 app.post('/addcomment', (req,res) => {
@@ -86,9 +89,10 @@ app.post('/addcomment', (req,res) => {
     },(err,result)=>{
         if (err) return console.log(err)
 
-        console.log('saved: '+result)
+        console.log('saved')
         res.redirect('/')
     })
+    db.close;
 });
 
 app.post('/updatePost', (req,res) => {
@@ -119,7 +123,7 @@ app.post('/deletePost', (req,res) => {
         },
         (err,result) => {
             if (err) return res.send(500, err)
-            console.log('deleted:')
+            console.log('deleted')
         }
     )
     res.redirect('/')
@@ -135,7 +139,7 @@ app.post('/deleteComment', (req,res) => {
         },
         (err,result) => {
             if (err) return res.send(500, err)
-            console.log('deleted:')
+            console.log('deleted')
         }
     )
     res.redirect('/')
