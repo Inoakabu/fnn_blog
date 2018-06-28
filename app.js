@@ -27,18 +27,6 @@ app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
     db.collection('fnn_blog')
-    .find()
-    .sort({_id:-1})
-    .toArray((err,result) => {
-        if (err) return console.log(err)
-        console.log(result);
-        res.render('index.ejs', {fnn_blog: result})
-    })
-    db.close;
-});
-
-app.get('/comment',(req,res)=>{
-    db.collection('fnn_blog')
     .aggregate([
         { $lookup:
             {
@@ -48,14 +36,34 @@ app.get('/comment',(req,res)=>{
                 as: 'comments'
             }
         }
-    ])
-    .toArray(function(err,result){
+    ]).toArray(function(err,result){
         if(err) return console.log(err)
         console.log(JSON.stringify(result));
-        res.render('comment.ejs', {comment: result})
+        res.render('index.ejs', {fnn_blog: result})
         db.close;
     })
+db.close;
 });
+
+// app.get('/comment',(req,res)=>{
+//     db.collection('fnn_blog')
+//     .aggregate([
+//         { $lookup:
+//             {
+//                 from: 'fnn_blog_comment',
+//                 localField: 'uid',
+//                 foreignField: 'linkid',
+//                 as: 'comments'
+//             }
+//         }
+//     ])
+//     .toArray(function(err,result){
+//         if(err) return console.log(err)
+//         console.log(JSON.stringify(result));
+//         res.render('comment.ejs', {comment: result})
+//         db.close;
+//     })
+// });
 
 app.post('/addpost', (req,res) => {
     var objectId = new ObjectID();
@@ -114,32 +122,42 @@ app.post('/updatePost', (req,res) => {
     res.redirect('/')
 })
 
-app.post('/deletePost', (req,res) => {
-    console.log(req.body)
+// app.post('/deletePost', (req,res) => {
+//     console.log(req.body)
+//     db.collection('fnn_blog')
+//     .findOneAndDelete(
+//         {
+//             uid: req.body.deleteBlogPost
+//         },
+//         (err,result) => {
+//             if (err) return res.send(500, err)
+//             console.log('deleted')
+//         }
+//     )
+//     res.redirect('/')
+// })
+
+app.post('/deletePost/:id', (req,res) => {
     db.collection('fnn_blog')
-    .findOneAndDelete(
-        {
-            uid: req.body.deleteBlogPost
-        },
+    .findOneAndDelete({ uid: req.params.id },
         (err,result) => {
             if (err) return res.send(500, err)
-            console.log('deleted')
+            console.log('deleted:', req.params.id)
+            res.redirect('/');
         }
     )
-    res.redirect('/')
 })
 
 // call if comment have to be deletet AND the Post itself
-app.post('/deleteComment', (req,res) => {
-    console.log(req.body)
+app.post('/deleteComment/:id', (req,res) => {
     db.collection('fnn_blog_comment')
     .findOneAndDelete(
-        {
-            uid: req.body.deleteBlogComment
+        { 
+            commentid: req.params.id 
         },
         (err,result) => {
             if (err) return res.send(500, err)
-            console.log('deleted')
+            console.log('deleted:', req.params.id)
         }
     )
     res.redirect('/')
