@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/index.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/blog/delete.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/blog/modal.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/blog/post.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/partial/addpost.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/partial/header.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/partial/marginal.css">
+    </head>
+    <body>
+        <div class="header">
+            <h2>Fabbys News Network</h2>
+        </div>
+        <div class="flex">
+            <div class="left">
+                <form action="/addpost" method="POST">
+                    <ul class="flex-outer">
+                        <li>
+                            <label for="title">Title</label>
+                            <input type="text" name="blogposttitle"><br />
+                        </li>
+                        <li>
+                            <label for="post">Post</label>
+                            <textarea type="textarea" name="blogpost"></textarea><br />
+                        </li>
+                        <li>
+                            <button rows="6" type="submit">Submit</button>
+                        </li>
+                    </ul>
+                </form>
+
+                <% for(var i=0; i<fnn_blog.length; i++) {%>
+                        <div class="fnn_blog">
+                            <div>
+                                <h3><%= fnn_blog[i].blogposttitle %></h3>
+                                <p><%= fnn_blog[i].blogpost %></p>
+                            </div>
+                            <form name="deleteForm" method="POST" action="/deletePost">
+                                <input type="text" name="deleteBlogPost" value="<%= fnn_blog[i].uid %>" style="display: none"/>
+                                <button>Delete</button>
+                            </form>
+                            <div>
+                                <button id="updateModal-Btn" data-id="<%= fnn_blog[i].uid %>">Update</button>
+                                <div id="updateModal" class="modal" data-modal="<%= fnn_blog[i].uid %>">
+                                    <div class="updateModal-content">
+                                    <h3>Update: <%= fnn_blog[i].blogposttitle %></h3>
+                                        <span class="close" data-modal-close="<%= fnn_blog[i].uid %>">&times;</span>
+                                        <form name = "updateForm" method="POST" action="/updatePost">
+                                            <input type="text" name="findBlogPost" value="<%= fnn_blog[i].uid %>" style="display: none"/>
+                                            <p><b>Update:</b></p>
+                                            <input typ="text" name="replaceBlogPostTitle" value="<%= fnn_blog[i].blogposttitle %>"/>
+                                            <input typ="text" name="replaceBlogPost" value="<%= fnn_blog[i].blogpost %>"/>
+                                            <button> Update </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                <% } %>
+            </div>
+            <div class="right">
+                    <div class="card">
+                      <h2>About Us</h2>
+                      <p>We are Fabbys News Network ... and ... we are. Retarded
+                      </p>
+                    </div>
+                    <div class="card">
+
+                    </div>
+                    <div class="card">
+                      <h3>Follow Me</h3>
+                      <p>Some community shit posting fuck duck</p>
+                    </div>
+                </div>
+        </div>
+        <script src="libs/modal.js"></script>
+    </body>
+</html>

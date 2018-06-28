@@ -1,0 +1,14 @@
+<div class="post">
+    <div>
+        <h2><%= post.blogposttitle %></h2>
+        <p><%= post.blogpost %></p>
+        <%- include('addcomment', {post: post}); %>
+    </div>
+    <div class="post-helper">
+        <!-- <code><%= post.uid %></code> -->
+        <div class="flex">
+            <%- include('modal', {post: post}); %>
+            <%- include('delete', {post: post}); %>
+        </div>
+    </div>
+</div>
