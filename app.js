@@ -37,12 +37,21 @@ app.get('/', (req, res) => {
 });
 
 app.get('/comment',(req,res)=>{
-    db.collection('fnn_blog_comment')
-    .find({"linkid":fnn_blog.uid})
+    db.collection('fnn_blog')
+    .aggregate([
+        { $lookup:
+            {
+                from: 'fnn_blog_comment',
+                localField: 'uid',
+                foreignField: 'linkid',
+                as: 'comment'
+            }
+        }
+    ])
     .toArray((err,result)=>{
         if(err) return console.log(err)
-
-        res.render('comment.ejs', {fnn_blog_comment: result})
+        //console.log(JSON.stringify(result));
+        res.render('comment.ejs', {post: result})
     })
 });
 
@@ -72,7 +81,7 @@ app.post('/addcomment', (req,res) => {
     db.collection('fnn_blog_comment')
     .save({
         comment: req.body.comment,
-        uid: newHex,
+        commentid: newHex,
         linkid: req.body.uid
     },(err,result)=>{
         if (err) return console.log(err)
