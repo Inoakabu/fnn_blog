@@ -4,10 +4,9 @@ var app = express();
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient
 var ObjectID = require('mongodb').ObjectID
+// var async = require('async');
 
 var db
-
-
 
 MongoClient.connect("mongodb://localhost:27017", (err,client)=>{
     if (err) return console.log(err)
@@ -37,6 +36,7 @@ app.get('/', (req, res) => {
     })
 });
 
+
 app.post('/addpost', (req,res) => {
     var objectId = new ObjectID();
     var originalHex = objectId.toHexString();
@@ -47,6 +47,24 @@ app.post('/addpost', (req,res) => {
         blogposttitle: req.body.blogposttitle,
         blogpost: req.body.blogpost,
         uid: newHex
+    },(err,result)=>{
+        if (err) return console.log(err)
+
+        console.log('saved: '+result)
+        res.redirect('/')
+    })
+});
+
+app.post('/addcomment', (req,res) => {
+    var objectId = new ObjectID();
+    var originalHex = objectId.toHexString();
+    var newObjectId = new ObjectID.createFromHexString(originalHex);
+    var newHex = newObjectId.toHexString();
+    db.collection('fnn_blog_comment')
+    .save({
+        comment: req.body.comment,
+        uid: newHex,
+        linkid: req.body.uid
     },(err,result)=>{
         if (err) return console.log(err)
 
