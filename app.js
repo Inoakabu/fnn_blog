@@ -13,7 +13,7 @@ MongoClient.connect("mongodb://localhost:27017", (err,client)=>{
     if (err) return console.log(err)
     db = client.db('fnn_blog')
     app.listen(3000,()=>{
-        console.log('listen 3000')
+        console.log('Server listen on Port 3000')
     })
 })
 
@@ -88,8 +88,3 @@ app.post('/deletePost', (req,res) => {
     )
     res.redirect('/')
 })
-
-
-// var postSchema = new mongoose.Schema({ body: String });
-
-// var Post = mongoose.model('Post', postSchema);

@@ -9,3 +9,9 @@ https://www.google.de/search?ei=ha4qW7WrKM3UsAexnI3IDg&q=nodejs+mongodb+blog+tut
 http://blog.chapagain.com.np/node-js-express-mongodb-simple-add-edit-delete-view-crud/
 
 https://code.tutsplus.com/tutorials/build-a-complete-mvc-website-with-expressjs--net-34168
+
+https://medium.com/of-all-things-tech-progress/starting-with-authentication-a-tutorial-with-node-js-and-mongodb-25d524ca0359
+
+https://www.meteor.com/tutorials/react/creating-an-app
+
+http://google.github.io/material-design-icons/
