@@ -1,56 +1,50 @@
-.addpost {
-    padding: 20px;
+.addcomment {
+    padding: 10px;
     box-shadow: 0 5px 1rem -.5rem rgba(0, 0, 0, 0.25);
     border: 1px solid rgba(0, 0, 0, .05);
     border-radius: 5px;
     transition: all 300ms ease-in-out;
 }
 
-.addpost:hover {
+.addcomment:hover {
     box-shadow: 0 5px 1rem -.2rem rgba(0, 0, 0, .5);
     border: 1px solid rgba(0, 0, 0, .25);
 }
 
-.addpost-wrapper {
+.addcomment-wrapper {
     /* display: flex; */
-    padding: 2rem 0 0;
+    padding: 0 0;
     width: 100%;
 }
 
-.addpost-wrapper legend {
+.addcomment-wrapper legend {
     /* margin-left: 1rem; */ 
     width: 100%;
 }
 
-.addpost-wrapper legend:first-child {
+.addcomment-wrapper legend:first-child {
     margin-left: 0;
     width: auto;
 }
 
-.addpost-wrapper label {
-    font-size: .8rem;   
+.addcomment-wrapper label {
+    font-size: 1rem;
 }
 
-.addpost-wrapper input {
-    display: block;
-    height: 2rem;
-    border-radius: 3px; 
-    border: 1px solid #000000;
-    padding: .5rem;
-    margin-bottom: .5rem;
-}
-.addpost-wrapper textarea {
+.addcomment-wrapper textarea {
     display: block;
     width: 100%;
-    height: 6rem;
+    height: 2.1rem;
     border-radius: 3px; 
     border: 1px solid #000000;
     padding: .5rem;
+    margin-top: .5rem;
     margin-bottom: .5rem;
-    max-width: 1450px;
+    min-height: 2.1rem;
+    max-width: 400px;
 }
 
-.addpost a button {
+.addcomment a button {
     margin-left: auto;
     padding: 8px 16px;
     border: none;
