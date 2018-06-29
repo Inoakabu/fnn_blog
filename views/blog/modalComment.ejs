@@ -1,13 +1,13 @@
 <div>
-    <button id="updateModal-Btn" data-id="<%= post.uid %>" class="icon"><i class="material-icons md-18">edit</i></button>
-    <div id="updateModal" class="modal" data-modal="<%= post.uid %>">
+    <button id="updateModal-Btn" data-id="<%= comment.commentid %>" class="icon"><i class="material-icons md-18">edit</i></button>
+    <div id="updateModal" class="modal" data-modal="<%= comment.commentid %>">
         <div class="updateModal-content">
-            <button class="close" data-modal-close="<%= post.uid %>">&times;</button>
-            <form name="updateForm" method="POST" action="/updatePost">
-                <h3>Update your fucking Comment</h3>                
-                <input type="text" name="findBlogPost" value="<%= post.uid %>" style="display: none" />
+            <button class="close" data-modal-close="<%= comment.commentid %>">&times;</button>
+            <form name="updateForm" method="POST" action="/updateComment">
+                <h3>Update your fucking Post</h3>                
+                <input type="text" name="findComment" value="<%= comment.commentid %>" style="display: none" />
                 <legend>
-                    <textarea type="textarea" name="replaceBlogPost"><%= post.blogpost %></textarea>
+                    <textarea type="textarea" name="replaceComment"><%= comment.comment %></textarea>
                     <!-- <small>Supported formatting includes: <code>```pre```</code>, <code>`code`</code>, <code>_italic_</code>, <code>*bold*</code>, and even <code>~strike~</code> </small> -->
                 </legend>
                 <button>Submit</button>
@@ -17,9 +17,9 @@
 </div>
 
 <script> 
-document.querySelector('[data-id="<%= post.uid %>"]').onclick = () => {
-    let modal = document.querySelector('[data-modal="<%= post.uid %>"]')
-    let modalCloseBTN = document.querySelector('[data-modal-close="<%= post.uid %>"]')
+document.querySelector('[data-id="<%= comment.commentid %>"]').onclick = () => {
+    let modal = document.querySelector('[data-modal="<%= comment.commentid %>"]')
+    let modalCloseBTN = document.querySelector('[data-modal-close="<%= comment.commentid %>"]')
     modal.style.display = "block"
     modalCloseBTN.onclick = function () {
         modal.style.display = "none";

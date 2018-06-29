@@ -35,6 +35,11 @@ app.get('/', (req, res) => {
                 foreignField: 'linkid',
                 as: 'comments'
             }
+        },
+        { $sort:
+            {
+                _id: -1
+            }
         }
     ]).toArray(function(err,result){
         if(err) return console.log(err)
@@ -42,28 +47,7 @@ app.get('/', (req, res) => {
         res.render('index.ejs', {fnn_blog: result})
         db.close;
     })
-db.close;
 });
-
-// app.get('/comment',(req,res)=>{
-//     db.collection('fnn_blog')
-//     .aggregate([
-//         { $lookup:
-//             {
-//                 from: 'fnn_blog_comment',
-//                 localField: 'uid',
-//                 foreignField: 'linkid',
-//                 as: 'comments'
-//             }
-//         }
-//     ])
-//     .toArray(function(err,result){
-//         if(err) return console.log(err)
-//         console.log(JSON.stringify(result));
-//         res.render('comment.ejs', {comment: result})
-//         db.close;
-//     })
-// });
 
 app.post('/addpost', (req,res) => {
     var objectId = new ObjectID();
@@ -80,8 +64,8 @@ app.post('/addpost', (req,res) => {
 
         console.log('saved')
         res.redirect('/')
+        db.close;
     })
-    db.close;
 });
 
 app.post('/addcomment', (req,res) => {
@@ -99,8 +83,8 @@ app.post('/addcomment', (req,res) => {
 
         console.log('saved')
         res.redirect('/')
+        db.close;
     })
-    db.close;
 });
 
 app.post('/updatePost', (req,res) => {
@@ -117,25 +101,30 @@ app.post('/updatePost', (req,res) => {
         }, 
         (err, result) => {
             if (err) return res.send(err)
+            console.log('updated');
+            res.redirect('/');
+            db.close;
     })
-    console.log('updated')
-    res.redirect('/')
 })
 
-// app.post('/deletePost', (req,res) => {
-//     console.log(req.body)
-//     db.collection('fnn_blog')
-//     .findOneAndDelete(
-//         {
-//             uid: req.body.deleteBlogPost
-//         },
-//         (err,result) => {
-//             if (err) return res.send(500, err)
-//             console.log('deleted')
-//         }
-//     )
-//     res.redirect('/')
-// })
+app.post('/updateComment', (req,res) => {
+    console.log(req.body)
+    db.collection('fnn_blog_comment')
+    .findOneAndUpdate(
+        {
+            commentid: req.body.findComment //query, lookup
+        },{
+        $set: {
+            comment: req.body.replaceComment
+        } // update statement
+        }, 
+        (err, result) => {
+            if (err) return res.send(err)
+            res.redirect('/')
+            db.close;
+    })
+    console.log('updated')
+})
 
 app.post('/deletePost/:id', (req,res) => {
     db.collection('fnn_blog')
@@ -143,7 +132,17 @@ app.post('/deletePost/:id', (req,res) => {
         (err,result) => {
             if (err) return res.send(500, err)
             console.log('deleted:', req.params.id)
-            res.redirect('/');
+        }
+    )
+    db.collection('fnn_blog_comment')
+    .remove(
+        {
+            linkid: req.params.id
+        },
+        (err,result) => {
+            if (err) return res.send(500, err)
+            res.redirect('/')
+            db.close;
         }
     )
 })
@@ -158,7 +157,8 @@ app.post('/deleteComment/:id', (req,res) => {
         (err,result) => {
             if (err) return res.send(500, err)
             console.log('deleted:', req.params.id)
+            res.redirect('/')
+            db.close;
         }
     )
-    res.redirect('/')
 })
