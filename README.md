@@ -8,7 +8,7 @@ Prio1:
 
 Topic | Subitem
 ----- | -------
-Post | [x]show
+Post    | [x]show
         | [x]delete
         | [x]add
         | [] from User
