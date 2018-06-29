@@ -1,4 +1,4 @@
-# fnn_blog"
+# Fabbys News Network Blog
 
 First of all - many thanks to @stefan0uh
 
