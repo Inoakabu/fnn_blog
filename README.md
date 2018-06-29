@@ -9,17 +9,17 @@ Prio1:
 Topic | Subitem
 ----- | -------
 Post | [x]show
-        | [x]delete
-        | [x]add
-        | [] from User
-        | [] create date
-        | [] testing
+| [x]delete
+| [x]add
+| [] from User
+| [] create date
+| [] testing
 Comment | [x]show
-        | [x]delete
-        | [x]add
-        | [] from User
-        | [] create date
-        | [] testing
+| [x]delete
+| [x]add
+| [] from User
+| [] create date
+| [] testing
 Usermanagment | [] Login
               | [] Password Handling
               | [] Security & Access
