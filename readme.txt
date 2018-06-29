@@ -15,3 +15,9 @@ https://medium.com/of-all-things-tech-progress/starting-with-authentication-a-tu
 https://www.meteor.com/tutorials/react/creating-an-app
 
 http://google.github.io/material-design-icons/
+
+https://codingsans.com/blog/node-config-best-practices
+
+https://scotch.io/tutorials/easy-node-authentication-setup-and-local
+
+http://jasonwatmore.com/post/2018/06/14/nodejs-mongodb-simple-api-for-authentication-registration-and-user-management
