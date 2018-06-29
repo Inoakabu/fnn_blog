@@ -31,12 +31,6 @@ Admin Env     | tbh
 Env-Configs   | [] outsource all configs
 Cleaning      | [] clean up code
 
-|        |         |
-|--------|---------|
-| Post | | [x]show |
-|        |         |
-|        |         |
-
 
 
 Prio2:
