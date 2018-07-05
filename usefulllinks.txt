@@ -21,3 +21,7 @@ https://codingsans.com/blog/node-config-best-practices
 https://scotch.io/tutorials/easy-node-authentication-setup-and-local
 
 http://jasonwatmore.com/post/2018/06/14/nodejs-mongodb-simple-api-for-authentication-registration-and-user-management
+
+https://www.npmjs.com/package/helmet
+
+https://www.terlici.com/2014/08/25/best-practices-express-structure.html

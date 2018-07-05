@@ -7,6 +7,7 @@ First of all - many thanks to @stefan0uh
 ----------
 
 ### Prio 1
+- [] add Helmet
 #### Post
 - [x] show
 - [x] delete
@@ -40,6 +41,7 @@ First of all - many thanks to @stefan0uh
 
 #### Cleaning
 - [ ] Clean up code
+- [ ] define router, controllers, helpers, middlewares, models / if needed in separate folders to got more structure
 
 ----------
 
@@ -50,3 +52,7 @@ First of all - many thanks to @stefan0uh
     - [ ] Config driven styling
     - [ ] Auto-size all textareas
 - tbh
+
+### Notes:
+
+- after modal.js is now implimented in the .ejs it´s now in the views/blog folder not longer under public/libs
