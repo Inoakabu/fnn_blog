@@ -13,22 +13,20 @@
         <link rel="stylesheet" type"text/css" href="/stylesheets/partial/footer.css">
     </head>
     <body>
-        <a href="/login" class="btn btn-default btn-sm">Login</a>
-        <a href="/signup" class="btn btn-default btn-sm">Signup</a>
-        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-
-        <% include partial/header %>
-
-        <div class="flex">
-            <div class="left">
-                <% include partial/addPost %>
+            <% include partial/header %>
+            <div class="flex">
+                <div class="left">
+                    <% include partial/addPost %>
+                    <% fnn_blog.forEach(function(post) { %>
+                        <%- include('blog/post', {post: post}); %>
+                    <% }); %>
+                </div>
+                <div class="right">
+                    <% include partial/marginal %>
+                </div>
             </div>
-            <div class="right">
-                <% include partial/marginal %>
-            </div>
-        </div>
-        <script> src="/libs/modal.sj" </script>
-    </body>
+            <script> src="/libs/modal.js" </script>
+        </body>
     <footer>
         <% include partial/footer %>
     </footer>
