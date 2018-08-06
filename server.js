@@ -147,7 +147,7 @@ app.post('/deletePost/:id', (req,res) => {
     )
 })
 
-// call if comment have to be deletet AND the Post itself
+// call if comment have to be deleted AND the Post itself
 app.post('/deleteComment/:id', (req,res) => {
     db.collection('fnn_blog_comment')
     .findOneAndDelete(

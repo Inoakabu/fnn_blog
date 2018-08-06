@@ -7,7 +7,7 @@ First of all - many thanks to @stefan0uh
 ----------
 
 ### Prio 1
-- [] add Helmet
+- [ ] add Helmet
 #### Post
 - [x] show
 - [x] delete
