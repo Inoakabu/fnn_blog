@@ -1,6 +1,6 @@
 var LocalStrategy   = require('passport-local').Strategy;
 
-var User            = require('../model/user'); // rework this to work with MongoClient
+var User            = require('../model/user'); 
 
 module.exports = function(passport){
 

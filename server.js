@@ -12,23 +12,7 @@ var configDB    = require('./app/controller/database.js')
 
 mongoose.connect(configDB.dbURL);
 
-mongoose.Promise = global.Promise;
-
-var db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'Connection Error DB'))
-
 require('./app/controller/passport')(passport)
-// var db;
-
-// MongoClient.connect("mongodb://localhost:27017", (err,client)=>{
-//     if (err) return console.log(err)
-//     db = client.db('fnn_blog')
-//     app.listen(3000,()=>{
-//         console.log('Server listen on Port 3000')
-//     })
-// })
-
 
 app.engine('html',require('ejs').renderFile);
 app.set('view engine', 'ejs');
@@ -36,7 +20,6 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(express.static('public'));
-// app.use(express.static('views'));
 app.use(bodyParser.json());
 
 app.use(session({ secret : 'secretscret' }));
@@ -44,7 +27,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./app/routes/user')(app, passport);
-require('./app/routes/post')(app, db);
+require('./app/routes/post')(app);
 
 app.listen(port);
 console.log('runs on ' + port);

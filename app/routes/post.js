@@ -1,6 +1,8 @@
 var Post = require('../model/post');
 var Comment = require('../model/comment');
-var ObjectID    = require('mongodb').ObjectID
+var ObjectID    = require('mongodb').ObjectID;
+
+
 
 module.exports = function(app, db){
 
@@ -35,24 +37,21 @@ module.exports = function(app, db){
     });
     
     app.post('/addpost', (req,res) => {
-        var objectId = new ObjectID();
-        var originalHex = objectId.toHexString();
-        var newObjectId = new ObjectID.createFromHexString(originalHex);
-        var newHex = newObjectId.toHexString();
-            
-        db.Post.save(
-            {
-                blogposttitle: req.body.blogposttitle,
-                blogpost: req.body.blogpost,
-                uid: newHex
-            },(err,result)=>{
-                    if (err) return console.log(err)
-            
-                    console.log('saved')
-                    res.redirect('/')
-                    db.close;
-            })
-    })
+        var newPost             = new Post();
+        newPost.blogposttitle   = req.body.blogposttitle;
+        newPost.blogpost        = req.body.blogpost;
+        newPost.uid             = newPost.generateUID();
+
+        return newPost.save(function(err){
+            if (!err){
+                console.log("new Post");
+            }else{
+                console.log(err)
+            }
+            return res.redirect('/')
+        });
+
+    });
 
         // db.collection('fnn_blog')
         // .save({
