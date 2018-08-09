@@ -45,11 +45,11 @@ app.route('/')
  */
 const post = require('./app/routes/post')
 app.route('/post')
-    .get((req, res) => post.get(req, res, db))
+    .get(post.get)
     .all((req, res, next) => auth(req, res, next, db))
-    .post((req, res) => post.create(req, res, db))
-    .delete((req, res) => post.delete(req, res, db))
-    .put((req, res) => post.update(req, res, db))
+    .post(post.create)
+    .delete(post.delete)
+    .put(post.update)
 
 /**
  * /Comment CRUDS
