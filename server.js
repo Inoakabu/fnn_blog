@@ -4,10 +4,19 @@ var app = express();
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient
 var ObjectID = require('mongodb').ObjectID
+var mongoose = require('mongoose');
 var passport    = require('passport');
 var session     = require('express-session');
 // var async = require('async');
 var dbURL       = require('./config/dbURL').dbURL
+
+mongoose.connect(dbURL+'/fnn_blog',(err)=>{
+    if(err){
+        return console.log(err)
+    }else{
+        console.log('[*] Connected to db: '+dbURL)
+    }
+});
 
 var db
 
@@ -79,7 +88,7 @@ app.post('/addpost', (req,res) => {
     },(err,result)=>{
         if (err) return console.log(err)
 
-        console.log('saved')
+        console.log('[*] Info: Post saved')
         res.redirect('/')
         db.close;
     })
@@ -98,7 +107,7 @@ app.post('/addcomment', (req,res) => {
     },(err,result)=>{
         if (err) return console.log(err)
 
-        console.log('saved')
+        console.log('[*] Info: Comment saved')
         res.redirect('/')
         db.close;
     })
@@ -118,7 +127,7 @@ app.post('/updatePost', (req,res) => {
         }, 
         (err, result) => {
             if (err) return res.send(err)
-            console.log('updated');
+            console.log('[*] Info: Post updated');
             res.redirect('/');
             db.close;
     })
@@ -137,6 +146,7 @@ app.post('/updateComment', (req,res) => {
         }, 
         (err, result) => {
             if (err) return res.send(err)
+            console.log('[*] Info: Comment updated');
             res.redirect('/')
             db.close;
     })
@@ -148,7 +158,7 @@ app.post('/deletePost/:id', (req,res) => {
     .findOneAndDelete({ uid: req.params.id },
         (err,result) => {
             if (err) return res.send(500, err)
-            console.log('deleted:', req.params.id)
+            console.log('[*] Info: Post deleted:', req.params.id)
         }
     )
     db.collection('fnn_blog_comment')
@@ -173,7 +183,7 @@ app.post('/deleteComment/:id', (req,res) => {
         },
         (err,result) => {
             if (err) return res.send(500, err)
-            console.log('deleted:', req.params.id)
+            console.log('[*] Info: Comments in deleted Post deleted:', req.params.id)
             res.redirect('/')
             db.close;
         }
