@@ -1,14 +1,14 @@
-var express = require('express');
-var app = express();
-// var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
-var MongoClient = require('mongodb').MongoClient
-var ObjectID = require('mongodb').ObjectID
-var mongoose = require('mongoose');
-var passport    = require('passport');
-var session     = require('express-session');
-// var async = require('async');
-var dbURL       = require('./config/dbURL').dbURL
+var express             = require('express');
+var app                 = express();
+// var mongoose         = require('mongoose');
+var bodyParser          = require('body-parser');
+var MongoClient         = require('mongodb').MongoClient
+var ObjectID            = require('mongodb').ObjectID
+var mongoose            = require('mongoose');
+var passport            = require('passport');
+var session             = require('express-session');
+// var async            = require('async');
+var dbURL               = require('./config/dbURL').dbURL
 
 mongoose.connect(dbURL+'/fnn_blog',(err)=>{
     if(err){
@@ -52,6 +52,7 @@ require('./routes/user')(app, passport);
 app.listen(3000,()=>{
     console.log('[*] Infolog: app runs on localhost, port 3000')
 })
+
 
 app.get('/', (req, res) => {
     db.collection('fnn_blog')
