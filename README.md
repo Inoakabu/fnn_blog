@@ -25,11 +25,10 @@ First of all - many thanks to @stefan0uh
 - [ ] testing
 
 #### Usermanagment
-- [ ] Login
+- [x] Login
 - [ ] Password Handling
-- [ ] Security & Access
-- [ ] Userprofil
-- tbh
+- [ ] Security & Access & Permissions
+- [x] Userprofil
 
 #### Admin Env
 - [ ] Security & Handling
