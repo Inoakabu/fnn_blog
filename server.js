@@ -37,7 +37,7 @@ const db = mongoose.connection;
 const auth = require('./app/routes/auth')
 const main = require('./app/routes/main')
 app.route('/')
-    .get((req, res) => main.all(req, res, db));
+    .get(main.all);
 
 
 /**
