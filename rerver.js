@@ -3,7 +3,6 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     config = require('./app/config/config.json'),
-    STATUSCODE = require('./app/helper/StatusCodes').statuses,
     session = require('express-session');
 
 app.use(bodyParser.json());

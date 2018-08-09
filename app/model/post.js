@@ -1,21 +1,14 @@
-var mongoose = require('mongoose');
-var ObjectID    = require('mongodb').ObjectID
+const mongoose = require('mongoose');
+require('mongoose-uuid2')(mongoose);
+const UUID = mongoose.Types.UUID;
 
-var postSchema = mongoose.Schema({
-        blogposttitle           : String,
-        blogpost                : String,
-        uid                     : String,
-        createdByUser           : String,
-        createdOn               : Date,
-        lastUpdate              : Date,
+const postSchema = mongoose.Schema({
+        id: { type: UUID, default: uuid.v4 },
+        title: String,
+        content: String,
+        user: String,
+        createdOn: Date,
+        lastUpdate: Date,
 });
-
-postSchema.methods.generateUID = function(){
-        var objectId = new ObjectID();
-        var originalHex = objectId.toHexString();
-        var newObjectId = new ObjectID.createFromHexString(originalHex);
-        var newHex = newObjectId.toHexString();
-        return newHex;
-}
 
 module.exports = mongoose.model('Post', postSchema);

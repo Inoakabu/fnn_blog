@@ -1,13 +1,9 @@
 const config = require('./../config/config.json'),
-    ObjectID = require('mongodb').ObjectID,
     STATUSCODE = require('./../helper/StatusCodes').statuses;
 
 exports.create = (req, res, db) => {
-    const oHex = new ObjectID().toHexString();
-    const nHex = new ObjectID.createFromHexString(oHex).toHexString();
     db.collection(config.db.collections.comments)
         .save({
-            id: nHex,
             content: req.body.comment_content,
             post_id: req.body.post_id
         }, (err, result) => {

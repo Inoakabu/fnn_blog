@@ -6,21 +6,16 @@
   "scripts": {
     "start": "node server.js",
     "test": "./node_modules/.bin/mocha --reporter spec",
-    "rev": "nodemon rerver.js",
     "dev": "nodemon server.js"
   },
   "author": "niclas wormann",
   "license": "MIT",
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
-    "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "mongodb": "^3.0.10",
     "mongoose": "^5.2.7",
-    "passport": "^0.4.0",
-    "passport-local": "^1.0.0"
+    "mongoose-uuid2": "^2.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
