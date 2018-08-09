@@ -41,7 +41,9 @@ app.use(express.static('public'));
 // app.use(express.static('views'));
 app.use(bodyParser.json());
 
-app.use(session({ secret : 'secretscret' }));
+app.use(session({   secret              : 'secretscret',
+                    saveUninitialized   : false,
+                    resave              : false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -75,7 +77,7 @@ app.get('/', (req, res) => {
     })
 });
 
-app.post('/addpost', (req,res) => {
+app.post('/addpost', isLoggedIn,(req,res) => {
     var objectId = new ObjectID();
     var originalHex = objectId.toHexString();
     var newObjectId = new ObjectID.createFromHexString(originalHex);
@@ -113,7 +115,7 @@ app.post('/addcomment', isLoggedIn,(req,res) => {
     })
 });
 
-app.post('/updatePost', (req,res) => {
+app.post('/updatePost', isLoggedIn,(req,res) => {
     console.log(req.body)
     db.collection('fnn_blog')
     .findOneAndUpdate(
@@ -133,7 +135,7 @@ app.post('/updatePost', (req,res) => {
     })
 })
 
-app.post('/updateComment', (req,res) => {
+app.post('/updateComment', isLoggedIn,(req,res) => {
     console.log(req.body)
     db.collection('fnn_blog_comment')
     .findOneAndUpdate(
@@ -153,7 +155,7 @@ app.post('/updateComment', (req,res) => {
     console.log('updated')
 })
 
-app.post('/deletePost/:id', (req,res) => {
+app.post('/deletePost/:id', isLoggedIn,(req,res) => {
     db.collection('fnn_blog')
     .findOneAndDelete({ uid: req.params.id },
         (err,result) => {
@@ -175,7 +177,7 @@ app.post('/deletePost/:id', (req,res) => {
 })
 
 // call if comment have to be deleted AND the Post itself
-app.post('/deleteComment/:id', (req,res) => {
+app.post('/deleteComment/:id', isLoggedIn,(req,res) => {
     db.collection('fnn_blog_comment')
     .findOneAndDelete(
         { 
@@ -197,5 +199,6 @@ function isLoggedIn(req, res, next) {
         return next();
 
     // if they aren't redirect them to the home page
+    console.log('You are not authenticated, please login')
     res.redirect('/');
 };
