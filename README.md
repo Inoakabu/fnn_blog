@@ -7,7 +7,7 @@ First of all - many thanks to @stefan0uh
 ----------
 
 ### Prio 1
-- [] add Helmet
+- [ ] add Helmet
 #### Post
 - [x] show
 - [x] delete
@@ -25,11 +25,10 @@ First of all - many thanks to @stefan0uh
 - [ ] testing
 
 #### Usermanagment
-- [ ] Login
+- [x] Login
 - [ ] Password Handling
-- [ ] Security & Access
-- [ ] Userprofil
-- tbh
+- [ ] Security & Access & Permissions
+- [x] Userprofil
 
 #### Admin Env
 - [ ] Security & Handling

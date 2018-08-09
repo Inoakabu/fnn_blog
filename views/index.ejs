@@ -1,35 +1,51 @@
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" type"text/css" href="/stylesheets/index.css">
-        <link rel="stylesheet" type"text/css" href="/stylesheets/blog/delete.css">
-        <link rel="stylesheet" type"text/css" href="/stylesheets/blog/modal.css">
-        <link rel="stylesheet" type"text/css" href="/stylesheets/blog/post.css">
-        <link rel="stylesheet" type"text/css" href="/stylesheets/partial/addpost.css">
-        <link rel="stylesheet" type"text/css" href="/stylesheets/blog/addcomment.css">
-        <link rel="stylesheet" type"text/css" href="/stylesheets/partial/header.css">
-        <link rel="stylesheet" type"text/css" href="/stylesheets/partial/marginal.css">
-        <link rel="stylesheet" type"text/css" href="/stylesheets/partial/footer.css">
-    </head>
-    <body>
-        <a href="/login" class="btn btn-default btn-sm">Login</a>
-        <a href="/signup" class="btn btn-default btn-sm">Signup</a>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type "text/css" href="/stylesheets/index.css">
+    <link rel="stylesheet" type "text/css" href="/stylesheets/blog/delete.css">
+    <link rel="stylesheet" type "text/css" href="/stylesheets/blog/modal.css">
+    <link rel="stylesheet" type "text/css" href="/stylesheets/blog/post.css">
+    <link rel="stylesheet" type "text/css" href="/stylesheets/partial/addpost.css">
+    <link rel="stylesheet" type "text/css" href="/stylesheets/blog/addcomment.css">
+    <link rel="stylesheet" type "text/css" href="/stylesheets/partial/header.css">
+    <link rel="stylesheet" type "text/css" href="/stylesheets/partial/marginal.css">
+    <link rel="stylesheet" type "text/css" href="/stylesheets/partial/footer.css">
+</head>
+<body>
+    <script>
+        // console.log(getCookie("connect.sid"))
+    </script>
+    <%if (isLoggedIn) { %>
+        <a href="/profile" class="btn btn-default btn-sm">Profile</a>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    <% } else { %>
+        <a href="/signup" class="btn btn-default btn-sm">Signup</a>
+        <a href="/login" class="btn btn-default btn-sm" >Login</a>
+    <% } %>
 
-        <% include partial/header %>
-
+    <% include partial/header %>
         <div class="flex">
             <div class="left">
+            <%if (isLoggedIn) { %>
                 <% include partial/addPost %>
+            <% } %>
+
+                    <% fnn_blog.forEach(function(post) { %>
+                        <%- include('blog/post', {post: post}); %>
+                            <% }); %>
             </div>
             <div class="right">
                 <% include partial/marginal %>
             </div>
         </div>
-        <script> src="/libs/modal.sj" </script>
-    </body>
-    <footer>
-        <% include partial/footer %>
-    </footer>
+
+        <script> src = "/libs/modal.js" </script>
+</body>
+<footer>
+    <% include partial/footer %>
+</footer>
+
+
 </html>
