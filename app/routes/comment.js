@@ -1,4 +1,8 @@
-exports.create = (req, res) => {
+const config = require('./../config/config.json'),
+    ObjectID = require('mongodb').ObjectID,
+    STATUSCODE = require('./../helper/StatusCodes').statuses;
+
+exports.create = (req, res, db) => {
     const oHex = new ObjectID().toHexString();
     const nHex = new ObjectID.createFromHexString(oHex).toHexString();
     db.collection(config.db.collections.comments)
@@ -15,7 +19,7 @@ exports.create = (req, res) => {
         })
 }
 
-exports.delete = (req, res) => {
+exports.delete = (req, res, db) => {
     db.collection(config.db.collections.comments)
         .findOneAndDelete({ id: req.body.comment_id },
             (err, result) => {
@@ -28,7 +32,7 @@ exports.delete = (req, res) => {
         )
 }
 
-exports.update = (req, res) => {
+exports.update = (req, res, db) => {
     db.collection(config.db.collections.comments)
         .findOneAndUpdate({ id: req.body.comment_id }, {
             $set: {

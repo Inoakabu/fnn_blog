@@ -1,4 +1,20 @@
-exports.create = (req, res) => {
+const config = require('./../config/config.json'),
+    ObjectID = require('mongodb').ObjectID,
+    STATUSCODE = require('./../helper/StatusCodes').statuses;
+
+
+exports.get = (req, res, db) => {
+    db.collection(config.db.collections.posts)
+        .findOne({ id: req.body.post_id },
+            (err, result) => {
+                if (err) res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
+                console.log(result)               
+                console.log('[*] Info: Post showed:', req.body.post_id)
+                res.status(STATUSCODE.OK).json(result)
+            })
+};
+
+exports.create = (req, res, db) => {
     const oHex = new ObjectID().toHexString();
     const nHex = new ObjectID.createFromHexString(oHex).toHexString();
     db.collection(config.db.collections.posts)
@@ -15,7 +31,7 @@ exports.create = (req, res) => {
         })
 };
 
-exports.delete = (req, res) => {
+exports.delete = (req, res, db) => {
     db.collection(config.db.collections.posts)
         .findOneAndDelete({ post_id: req.body.post_id },
             (err, result) => {
@@ -34,7 +50,7 @@ exports.delete = (req, res) => {
             })
 };
 
-exports.update = (req, res) => {
+exports.update = (req, res, db) => {
     db.collection(config.db.collections.posts)
         .findOneAndUpdate({ id: req.body.post_id }, {
             $set: {

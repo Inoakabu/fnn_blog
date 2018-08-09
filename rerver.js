@@ -2,8 +2,7 @@ const express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
-    config = require('./config/config.json'),
-    ObjectID = require('mongodb').ObjectID,
+    config = require('./app/config/config.json'),
     STATUSCODE = require('./app/helper/StatusCodes').statuses,
     session = require('express-session');
 
@@ -33,42 +32,32 @@ mongoose.connect(`mongodb://${config.db.ip}:${config.db.port}/${config.db.name}`
 const db = mongoose.connection;
 // db.dropDatabase(); // clear DB!
 
-app.get('/', (req, res) => {
-    db.collection(config.db.collections.posts)
-        .aggregate([{
-            $lookup: {
-                from: config.db.collections.comments,
-                localField: 'post_id',
-                foreignField: 'post_id',
-                as: 'comments'
-            }
-        }, {
-            $sort: { _id: -1 }
-        }])
-        .toArray((err, result) => {
-            if (err) res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
-            // console.log(result)               
-            res.status(STATUSCODE.OK).json(result)
-            db.close;
-        })
-});
+
+/**
+ * / CRUDS
+ */
+const main = require('./app/routes/main')
+app.route('/')
+    .get((req, res) => main.all(req, res, db));
 
 
 /**
  * /Post CRUDS
  */
-const post = require('./app/routes/post')(db)
+const post = require('./app/routes/post')
 app.route('/post')
     .all()
-    .post(post.create)
-    .delete(post.delete)
-    .put(post.update)
+    .get((req, res) => post.get(req, res, db))
+    .post((req, res) => post.create(req, res, db))
+    .delete((req, res) => post.delete(req, res, db))
+    .put((req, res) => post.update(req, res, db))
+
 /**
  * /Comment CRUDS
 */
-const comment = require('./app/routes/comment')(db)
+const comment = require('./app/routes/comment')
 app.route('/comment')
     .all()
-    .post(comment.create)
-    .delete(comment.delete)
-    .put(comment.update)
+    .post((req, res) => comment.create(req, res, db))
+    .delete((req, res) => comment.delete(req, res, db))
+    .put((req, res) => comment.update(req, res, db))

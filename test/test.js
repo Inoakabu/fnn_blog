@@ -1,27 +1,13 @@
 const should = require('chai').should(),
     http = require('http'),
     request = require('supertest'),
-    config = require('./../config/config.json'),
+    config = require('./../app/config/config.json'),
     STATUSCODE = require('./../app/helper/StatusCodes').statuses;
 
 
 beforeEach(function () {
     // setTimeout(3000)
 })
-
-// Test
-describe("Get Tests", () => {
-    it("GET / should be Code 200", (done) => {
-        request('http://localhost:' + config.express.port)
-            .get('/')
-            .expect(STATUSCODE.OK)
-            .end((err) => {
-                if (err)
-                    return done(err)
-                done();
-            })
-    })
-});
 
 let postID;
 let commentID;
@@ -62,6 +48,30 @@ describe("Post Tests", () => {
                 if (err)
                     return done(err)
                 commentID = res.body.id
+                done();
+            })
+    })
+});
+
+describe("Get Tests", () => {
+    it("GET / should be Code 200", (done) => {
+        request('http://localhost:' + config.express.port)
+            .get('/')
+            .expect(STATUSCODE.OK)
+            .end((err) => {
+                if (err)
+                    return done(err)
+                done();
+            })
+    })
+    it("GET /post should be Code 200", (done) => {
+        request('http://localhost:' + config.express.port)
+            .get('/post')
+            .send({ post_id: postID })
+            .expect(STATUSCODE.OK)
+            .end((err) => {
+                if (err)
+                    return done(err)
                 done();
             })
     })
