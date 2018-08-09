@@ -36,6 +36,7 @@ const db = mongoose.connection;
 /**
  * / CRUDS
  */
+const auth = require('./app/routes/auth')
 const main = require('./app/routes/main')
 app.route('/')
     .get((req, res) => main.all(req, res, db));
@@ -46,7 +47,7 @@ app.route('/')
  */
 const post = require('./app/routes/post')
 app.route('/post')
-    .all()
+    .all(auth)
     .get((req, res) => post.get(req, res, db))
     .post((req, res) => post.create(req, res, db))
     .delete((req, res) => post.delete(req, res, db))
@@ -57,7 +58,7 @@ app.route('/post')
 */
 const comment = require('./app/routes/comment')
 app.route('/comment')
-    .all()
+    .all(auth)
     .post((req, res) => comment.create(req, res, db))
     .delete((req, res) => comment.delete(req, res, db))
     .put((req, res) => comment.update(req, res, db))
