@@ -2,19 +2,18 @@ const express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
-    config = require('./app/config/config.json'),
-    session = require('express-session');
+    config = require('./app/config/config.json');
 
+/**
+ * BodyParser
+ */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(session({
-    secret: 'secretscret',
-    saveUninitialized: false,
-    resave: false
-}));
-
+/**
+ * Mongo DB connection
+ */
 mongoose.connect(`mongodb://${config.db.ip}:${config.db.port}/${config.db.name}`, { useNewUrlParser: true }, (err) => {
     if (err) {
         console.log("[!] First start the DB.")

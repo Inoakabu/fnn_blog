@@ -107,7 +107,7 @@ describe("PUT Tests", () => {
     })
 });
 
-describe.skip("DELETE Tests", () => {
+describe("DELETE Tests", () => {
     it(`DELETE /comment second Comment in previous Post and should be code 200`, (done) => {
         request('http://localhost:' + config.express.port)
             .delete('/comment')
