@@ -20,7 +20,7 @@ mongoose.connect(dbURL + '/fnn_blog', (err) => {
     }
 });
 
-var port        = process.env.PORT || 3000;
+var db
 
 MongoClient.connect(dbURL, (err, client) => {
     if (err) {
@@ -34,11 +34,7 @@ MongoClient.connect(dbURL, (err, client) => {
     db = client.db('fnn_blog')
 })
 
-var configDB    = require('./app/controller/database.js')
-
-mongoose.connect(configDB.dbURL);
-
-require('./app/controller/passport')(passport)
+require('./controller/passport')(passport)
 
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
@@ -46,6 +42,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+// app.use(express.static('views'));
 app.use(bodyParser.json());
 
 app.listen(3000, () => {
