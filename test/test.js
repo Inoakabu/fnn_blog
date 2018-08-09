@@ -2,7 +2,7 @@ const should = require('chai').should(),
     http = require('http'),
     request = require('supertest'),
     config = require('./../config/config.json'),
-    STATUSCODE = require('./../helper/StatusCodes').statuses;
+    STATUSCODE = require('./../app/helper/StatusCodes').statuses;
 
 
 beforeEach(function () {

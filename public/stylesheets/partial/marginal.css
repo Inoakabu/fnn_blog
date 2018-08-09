@@ -1,9 +1,0 @@
-.card {
-    padding: 20px;
-    margin-top: 20px;
-    background-color: #fafafa;
-    border-radius: 3px;
-}
-.card:first-child {
-    margin-top: 0;
-}
