@@ -17,7 +17,7 @@ app.use(session({
     resave: false
 }));
 
-mongoose.connect(`mongodb://${config.db.ip}:${config.db.port}/${config.db.name}`, (err) => {
+mongoose.connect(`mongodb://${config.db.ip}:${config.db.port}/${config.db.name}`, { useNewUrlParser: true }, (err) => {
     if (err) {
         console.log("[!] First start the DB.")
         process.exit();
@@ -135,15 +135,15 @@ app.route('/comment')
     })
     .put((req, res) => {
         db.collection(config.db.collections.comments)
-        .findOneAndUpdate({ id: req.body.comment_id }, {
-            $set: {
-                content: req.body.comment_content
-            }
-        }, (err, result) => {
-            if (err) res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
-            // console.log(result)            
-            console.log('[*] Info: Comment Updated:', result.value.id)
-            res.status(STATUSCODE.OK).json(result.value);
-            db.close;
-        })
+            .findOneAndUpdate({ id: req.body.comment_id }, {
+                $set: {
+                    content: req.body.comment_content
+                }
+            }, (err, result) => {
+                if (err) res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
+                // console.log(result)            
+                console.log('[*] Info: Comment Updated:', result.value.id)
+                res.status(STATUSCODE.OK).json(result.value);
+                db.close;
+            })
     });

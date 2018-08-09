@@ -1,38 +1,31 @@
-var express = require('express');
-var app = express();
-// var mongoose         = require('mongoose');
-var bodyParser = require('body-parser');
-var MongoClient = require('mongodb').MongoClient
-var ObjectID = require('mongodb').ObjectID
-var mongoose = require('mongoose');
-var passport = require('passport');
-var session = require('express-session');
-// var async            = require('async');
-var dbURL = require('./config/dbURL').dbURL
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const config = require('./config/config.json');
+const ObjectID = require('mongodb').ObjectID
+const mongoose = require('mongoose');
+const passport = require('passport');
+const session = require('express-session');
+const dbURL = require('./config/dbURL').dbURL
 
-mongoose.connect(dbURL + '/fnn_blog', (err) => {
+/**
+ * MongoDb Connection
+ */
+mongoose.connect(`mongodb://${config.db.ip}:${config.db.port}/${config.db.name}`, { useNewUrlParser: true }, (err) => {
     if (err) {
-        console.log("[!] Start DB First")
+        console.log("[!] First start the DB.")
         process.exit();
-        return 
+        return
     } else {
-        console.log('[*] Connected to db: ' + dbURL)
+        console.log(`[*] Connected to MongoDB`)
+        app.listen(config.express.port, () => {
+            console.log(`[*] Express runs on localhost:${config.express.port}`)
+        })
     }
 });
-
-var db
-
-MongoClient.connect(dbURL, (err, client) => {
-    if (err) {
-        console.log("[!] Start DB First")
-        process.exit();
-        return 
-    } else {
-        console.log('[*] Connected to db: ' + dbURL)
-    }
-
-    db = client.db('fnn_blog')
-})
+// Connection to MongoDB
+const db = mongoose.connection;
+// db.dropDatabase(); // clear DB!
 
 require('./controller/passport')(passport)
 
@@ -44,10 +37,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 // app.use(express.static('views'));
 app.use(bodyParser.json());
-
-app.listen(3000, () => {
-    console.log('[*] Infolog: app runs on localhost, port 3000')
-})
 
 app.use(session({
     secret: 'secretscret',
