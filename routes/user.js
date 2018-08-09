@@ -1,4 +1,5 @@
 var User    = require('../model/user');
+var crypto = require('crypto');
 
 module.exports = function(app, passport){
 
@@ -24,6 +25,28 @@ module.exports = function(app, passport){
             user : req.user
         });
     });
+
+    app.get('/renewPassword/:id', isLoggedIn, function(req,res){
+        res.render('renewPassword.ejs',{
+            user : req.user
+        })
+    });
+
+    app.get('/renewPassword/:id/:token', isLoggedIn, function(req,res){
+        User.findOne({ _id : req.params.id
+                    , resetPasswordToken : req.params.token
+                    , resetPasswordExpires : { $gt: Date.now() } }, function(err,user){
+                        console.log(user);
+                        if(!user){
+                            console.log('error - No reset token found or expired');
+                            return res.redirect('/profile');
+                        }else{
+                        res.render('./user/renewPassword.ejs',{
+                            user: req.user
+                        });
+                        }
+                    })
+    })
 
     app.get('/logout', function(req,res){
         req.logOut();
@@ -60,6 +83,61 @@ module.exports = function(app, passport){
             })
         })
     });
+
+    app.post('/renewPassword/:id', isLoggedIn, function(req,res){
+        // TODO:
+        // 0. only already logged in users can change PW by them self
+        // 0.1. if user forgot PW "forgot password" will send a mail
+        // to an admin or so
+        // 1. set ResetToken + expire
+        // 1.2. check old Password before do any changes
+        // 2. confirm new Password
+        // 2.1. bcrypt hash new password ON save
+
+        return User.findById(req.params.id, function(err, user){
+
+            user.resetPasswordToken = crypto.randomBytes(20).toString('hex');
+            user.resetPasswordExpires = Date.now() + 360000;
+            
+            let redirectURL = '/renewPassword/' + req.params.id + '/' + user.resetPasswordToken
+            return user.save(function(err){
+                if(!err){
+                    console.log("Token set" + user.resetPasswordToken);
+                    return res.redirect(redirectURL)
+                }else{
+                    console.log(err)
+                }
+            })
+        })
+    });
+
+    app.post('/renewPassword/:id/:token', isLoggedIn, function(req,res){
+        User.findOne(
+            { _id : req.params.id
+            , resetPasswordToken : req.params.token
+            , resetPasswordExpires : { $gt: Date.now() } }, function(err,user){
+            
+                let redirectURL = '/renewPassword/' + req.params.id + '/' + req.params.token
+            if(req.body.oldPassword != user.local.password){
+                console.log('old password not matching');
+                res.redirect(redirectURL);
+            }else if(req.body.newPassword != req.body.confirmNewPassword){
+                console.log('new password not confirmed');
+                res.redirect(redirectURL);
+            }else {
+                user.local.password = req.body.newPassword;
+
+                user.save(function(err){
+                    if (!err){
+                        console.log("password changed");
+                    }else{
+                        console.log(err)
+                    }
+                    return res.redirect(redirectURL);
+                })
+            }
+        })
+    })
 }
 
 // route middleware to make sure a user is logged in

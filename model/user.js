@@ -10,6 +10,8 @@ var userSchema = mongoose.Schema({
         lastName     : String,
         department   : String,
         companyId    : String,
+        resetPasswordToken      : String,
+        resetPasswordExpires    : Date,
 });
 
 userSchema.methods.generateHash = function(password){
