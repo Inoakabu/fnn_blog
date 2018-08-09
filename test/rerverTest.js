@@ -27,9 +27,9 @@ let postID;
 let commentID;
 
 describe("Post Tests", () => {
-    it(`POST /addPost should be Code 200`, (done) => {
+    it(`POST /post should be Code 200`, (done) => {
         request('http://localhost:' + config.express.port)
-            .post('/addPost')
+            .post('/post')
             .send({ post_title: `Test Title ${new Date}`, post_content: `Post Test ${new Date}` })
             .expect(STATUSCODE.CREATED)
             .end((err, res) => {
@@ -40,9 +40,9 @@ describe("Post Tests", () => {
             })
     })
 
-    it(`POST /addComment add a Comment in previous Post and should be Code 200`, (done) => {
+    it(`POST /comment add a Comment in previous Post and should be Code 200`, (done) => {
         request('http://localhost:' + config.express.port)
-            .post('/addcomment')
+            .post('/comment')
             .send({ content: `Comment Test #1 ${new Date}`, post_id: postID })
             .expect(STATUSCODE.CREATED)
             .end((err,res) => {
@@ -53,9 +53,9 @@ describe("Post Tests", () => {
             })
     })
 
-    it(`POST /addComment add a second Comment in previous Post and should be Code 200`, (done) => {
+    it(`POST /comment add a second Comment in previous Post and should be Code 200`, (done) => {
         request('http://localhost:' + config.express.port)
-            .post('/addcomment')
+            .post('/comment')
             .send({ content: `Comment Test #2 ${new Date}`, post_id: postID })
             .expect(STATUSCODE.CREATED)
             .end((err, res) => {
@@ -68,9 +68,9 @@ describe("Post Tests", () => {
 });
 
 describe("PUT Tests", () => {
-    it(`PUT /updatePost and should be code 200`, (done) => {
+    it(`PUT /post and should be code 200`, (done) => {
         request('http://localhost:' + config.express.port)
-            .put('/updatePost')
+            .put('/post')
             .send({ post_id: postID, post_title: `NEW Test Title`, post_content: `NEW Content Test` })
             .expect(STATUSCODE.OK)
             .end((err) => {
@@ -79,9 +79,9 @@ describe("PUT Tests", () => {
                 done();
             })
     })
-    it(`PUT /updateComment and should be code 200`, (done) => {
+    it(`PUT /comment and should be code 200`, (done) => {
         request('http://localhost:' + config.express.port)
-            .put('/updateComment')
+            .put('/comment')
             .send({ comment_id: commentID, comment_content: `NEW Comment content Test` })
             .expect(STATUSCODE.OK)
             .end((err) => {
@@ -93,9 +93,9 @@ describe("PUT Tests", () => {
 });
 
 describe("DELETE Tests", () => {
-    it(`DELETE /deleteComment second Comment in previous Post and should be code 200`, (done) => {
+    it(`DELETE /comment second Comment in previous Post and should be code 200`, (done) => {
         request('http://localhost:' + config.express.port)
-            .delete('/deleteComment')
+            .delete('/comment')
             .send({ comment_id: commentID })
             .expect(STATUSCODE.OK)
             .end((err) => {
@@ -104,9 +104,9 @@ describe("DELETE Tests", () => {
                 done();
             })
     })
-    it(`DELETE /deletePost previous Post and should be code 200`, (done) => {
+    it(`DELETE /post previous Post and should be code 200`, (done) => {
         request('http://localhost:' + config.express.port)
-            .delete('/deletePost')
+            .delete('/post')
             .send({ post_id: postID })
             .expect(STATUSCODE.OK)
             .end((err) => {
