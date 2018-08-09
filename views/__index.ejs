@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/index.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/blog/delete.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/blog/modal.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/blog/post.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/partial/addpost.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/blog/addcomment.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/partial/header.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/partial/marginal.css">
+        <link rel="stylesheet" type"text/css" href="/stylesheets/partial/footer.css">
+    </head>
+    <body>
+            <% include partial/header %>
+            <div class="flex">
+                <div class="left">
+                    <% include partial/addPost %>
+                    <% fnn_blog.forEach(function(post) { %>
+                        <%- include('blog/post', {post: post}); %>
+                    <% }); %>
+                </div>
+                <div class="right">
+                    <% include partial/marginal %>
+                </div>
+            </div>
+            <script> src="/libs/modal.js" </script>
+        </body>
+    <footer>
+        <% include partial/footer %>
+    </footer>
+</html>
