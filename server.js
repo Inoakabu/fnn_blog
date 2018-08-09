@@ -94,7 +94,7 @@ app.post('/addpost', (req,res) => {
     })
 });
 
-app.post('/addcomment', (req,res) => {
+app.post('/addcomment', isLoggedIn,(req,res) => {
     var objectId = new ObjectID();
     var originalHex = objectId.toHexString();
     var newObjectId = new ObjectID.createFromHexString(originalHex);
@@ -189,3 +189,13 @@ app.post('/deleteComment/:id', (req,res) => {
         }
     )
 })
+
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on 
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+};
