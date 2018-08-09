@@ -4,17 +4,24 @@ var app = express();
 var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient
 var ObjectID = require('mongodb').ObjectID
+var passport    = require('passport');
+var session     = require('express-session');
 // var async = require('async');
+var dbURL       = require('./config/dbURL').dbURL
 
 var db
 
-MongoClient.connect("mongodb://localhost:27017", (err,client)=>{
-    if (err) return console.log(err)
+MongoClient.connect(dbURL, (err,client)=>{
+    if (err){ 
+        return console.log(err)
+    }else{
+        console.log('[*] Connected to db: '+dbURL)
+    }
+
     db = client.db('fnn_blog')
-    app.listen(3000,()=>{
-        console.log('Server listen on Port 3000')
-    })
 })
+
+require('./controller/passport')(passport)
 
 app.engine('html',require('ejs').renderFile);
 app.set('view engine', 'ejs');
@@ -24,6 +31,16 @@ app.use(bodyParser.urlencoded({ extended: true}));
 app.use(express.static('public'));
 // app.use(express.static('views'));
 app.use(bodyParser.json());
+
+app.use(session({ secret : 'secretscret' }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./routes/user')(app, passport);
+
+app.listen(3000,()=>{
+    console.log('[*] Infolog: app runs on localhost, port 3000')
+})
 
 app.get('/', (req, res) => {
     db.collection('fnn_blog')
@@ -43,7 +60,7 @@ app.get('/', (req, res) => {
         }
     ]).toArray(function(err,result){
         if(err) return console.log(err)
-        console.log(JSON.stringify(result));
+        //console.log(JSON.stringify(result));
         res.render('index.ejs', {fnn_blog: result})
         db.close;
     })
