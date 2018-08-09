@@ -118,14 +118,16 @@ module.exports = function(app, passport){
             , resetPasswordExpires : { $gt: Date.now() } }, function(err,user){
             
                 let redirectURL = '/renewPassword/' + req.params.id + '/' + req.params.token
-            if(req.body.oldPassword != user.local.password){
+                let password    = req.body.oldPassword;
+                let newPassword = req.body.newPassword;
+            if(!user.validPassword(password)){
                 console.log('old password not matching');
                 res.redirect(redirectURL);
             }else if(req.body.newPassword != req.body.confirmNewPassword){
                 console.log('new password not confirmed');
                 res.redirect(redirectURL);
             }else {
-                user.local.password = req.body.newPassword;
+                user.local.password = user.generateHash(newPassword);
 
                 user.save(function(err){
                     if (!err){
@@ -133,7 +135,7 @@ module.exports = function(app, passport){
                     }else{
                         console.log(err)
                     }
-                    return res.redirect(redirectURL);
+                    return res.redirect('/profile');
                 })
             }
         })

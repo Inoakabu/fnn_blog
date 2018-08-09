@@ -13,7 +13,7 @@ const dbURL = require('./config/dbURL').dbURL
  */
 mongoose.connect(`mongodb://${config.db.ip}:${config.db.port}/${config.db.name}`, { useNewUrlParser: true }, (err) => {
     if (err) {
-        console.log("[!] First start the DB.")
+        console.log("[!] First start the DB. " +err)
         process.exit();
         return
     } else {
