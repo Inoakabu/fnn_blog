@@ -27,6 +27,10 @@
                                 <strong>CompanyId</strong>: <%= user.companyId %>
                             </p>
                             <a href="/profile/editProfile/<%= user._id %>" class="btn btn-default"><span class="fa fa-user"></span> Edit Profile</a>
+
+                            <form action="/user/renewPassword/<%= user._id %>" method="POST">
+                                <button href="/user/renewPassword/<%= user._id %>/<%= user.token %>" type="changePW" class="btn btn-warning btn-lg">Change Password</button>
+                            </form>
         
                     </div>
                 </div>
