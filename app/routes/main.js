@@ -1,22 +1,12 @@
-const config = require('./../config/config.json'),
+const Post = require('./../model/post.js'),
     STATUSCODE = require('./../helper/StatusCodes').statuses;
 
-exports.all = (req, res, db) => {
-    db.collection(config.db.collections.posts)
-        .aggregate([{
-            $lookup: {
-                from: config.db.collections.comments,
-                localField: 'post_id',
-                foreignField: 'post_id',
-                as: 'comments'
-            }
-        }, {
-            $sort: { _id: -1 }
-        }])
-        .toArray((err, result) => {
+exports.all = (req, res) => {
+    Post.find()
+        .populate('Comment')
+        .exec((err, posts) => {
             if (err) res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
-            // console.log(result)               
-            res.status(STATUSCODE.OK).json(result)
-            db.close;
+            console.log(posts)
+            res.status(STATUSCODE.OK).json(posts)
         })
 }

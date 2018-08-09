@@ -1,12 +1,10 @@
-const uuid = require('uuid/v4')
 const mongoose = require('mongoose');
 require('mongoose-uuid2')(mongoose);
-const UUID = mongoose.Types.UUID;
+var Schema = mongoose.Schema;
 
 const commentSchema = mongoose.Schema({
-        id: { type: UUID, default: uuid.v4 },
-        post_id: UUID,
-        comment: String,
+        post_id: {type: Schema.ObjectId , ref: 'Post'},
+        content: String,
         user: String,
         createdOn: Date,
         lastUpdate: Date,

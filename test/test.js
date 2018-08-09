@@ -1,4 +1,4 @@
-const should = require('chai').should(),
+const expect = require('chai').expect
     http = require('http'),
     request = require('supertest'),
     config = require('./../app/config/config.json'),
@@ -9,8 +9,9 @@ beforeEach(function () {
     // setTimeout(3000)
 })
 
-let postID;
-let commentID;
+let post;
+let comment;
+let content = `Comment Test #2 ABC`
 
 describe("Post Tests", () => {
     it(`POST /post should be Code 200`, (done) => {
@@ -22,42 +23,40 @@ describe("Post Tests", () => {
             .end((err, res) => {
                 if (err)
                     return done(err)
-                postID = res.body._id;
+                post = res.body;
                 done();
             })
     })
 
-    it.skip(`POST /comment add a Comment in previous Post and should be Code 200`, (done) => {
+    it(`POST /comment add a Comment in previous Post and should be Code 200`, (done) => {
         request('http://localhost:' + config.express.port)
             .post('/comment')
             .set('x-access-token', config.auth)
-            .send({ content: `Comment Test #1 ${new Date}`, post_id: postID })
+            .send({ content: `Comment Test #1 ${new Date}`, post_id: post._id })
             .expect(STATUSCODE.CREATED)
             .end((err, res) => {
                 if (err)
                     return done(err)
-                // res.body.should.be.eql()
                 done();
             })
     })
 
-    it.skip(`POST /comment add a second Comment in previous Post and should be Code 200`, (done) => {
+    it(`POST /comment add a second Comment in previous Post and should be Code 200`, (done) => {
         request('http://localhost:' + config.express.port)
             .post('/comment')
             .set('x-access-token', config.auth)
-            .send({ content: `Comment Test #2 ${new Date}`, post_id: postID })
+            .send({ content: content, post_id: post._id })
             .expect(STATUSCODE.CREATED)
             .end((err, res) => {
                 if (err)
                     return done(err)
-                commentID = res.body.id
+                comment = res.body
                 done();
             })
     })
 });
-
-describe("Get Tests", () => {
-    it.skip("GET / should be Code 200", (done) => {
+describe("GET Tests", () => {
+    it("GET / should be Code 200", (done) => {
         request('http://localhost:' + config.express.port)
             .get('/')
             .expect(STATUSCODE.OK)
@@ -70,11 +69,23 @@ describe("Get Tests", () => {
     it("GET /post should be Code 200", (done) => {
         request('http://localhost:' + config.express.port)
             .get('/post')
-            .send({ _id: postID })
+            .send({ _id: post._id })
             .expect(STATUSCODE.OK)
             .end((err) => {
                 if (err)
                     return done(err)
+                done();
+            })
+    })
+    it("GET /comment second Comment should be Code 200", (done) => {
+        request('http://localhost:' + config.express.port)
+            .get('/comment')
+            .send({ _id: comment._id })
+            .expect(STATUSCODE.OK)
+            .end((err,res) => {
+                if (err)
+                    return done(err)
+                expect(res.body.content).to.equal(comment.content)
                 done();
             })
     })
@@ -85,7 +96,7 @@ describe("PUT Tests", () => {
         request('http://localhost:' + config.express.port)
             .put('/post')
             .set('x-access-token', config.auth)
-            .send({ _id: postID, title: `NEW Test Title`, content: `NEW Content Test` })
+            .send({ _id: post._id, title: `NEW Test Title`, content: `NEW Content Test` })
             .expect(STATUSCODE.OK)
             .end((err) => {
                 if (err)
@@ -93,11 +104,11 @@ describe("PUT Tests", () => {
                 done();
             })
     })
-    it.skip(`PUT /comment and should be code 200`, (done) => {
+    it(`PUT /comment and should be code 200`, (done) => {
         request('http://localhost:' + config.express.port)
             .put('/comment')
             .set('x-access-token', config.auth)
-            .send({ comment_id: commentID, comment_content: `NEW Comment content Test` })
+            .send({ _id: comment._id, content: `NEW Comment content Test` })
             .expect(STATUSCODE.OK)
             .end((err) => {
                 if (err)
@@ -108,12 +119,12 @@ describe("PUT Tests", () => {
 });
 
 describe("DELETE Tests", () => {
-    it.skip(`DELETE /comment second Comment in previous Post and should be code 200`, (done) => {
+    it(`DELETE /comment second Comment in previous Post and should be code 200`, (done) => {
         request('http://localhost:' + config.express.port)
             .delete('/comment')
             .set('x-access-token', config.auth)
-            .send({ comment_id: commentID })
-            .expect(STATUSCODE.OK)
+            .send({ _id: comment._id })
+            .expect(STATUSCODE.NO_CONTENT)
             .end((err) => {
                 if (err)
                     return done(err)
@@ -123,7 +134,7 @@ describe("DELETE Tests", () => {
     it(`DELETE /post previous Post and should be code 401`, (done) => {
         request('http://localhost:' + config.express.port)
             .delete('/post')
-            .send({ _id: postID })
+            .send({ _id: post._id })
             .expect(STATUSCODE.UNAUTHORIZED)
             .end((err) => {
                 if (err)
@@ -135,7 +146,7 @@ describe("DELETE Tests", () => {
         request('http://localhost:' + config.express.port)
             .delete('/post')
             .set('x-access-token', config.auth)
-            .send({ _id: postID })
+            .send({ _id: post._id })
             .expect(STATUSCODE.NO_CONTENT)
             .end((err) => {
                 if (err)
