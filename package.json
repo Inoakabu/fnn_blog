@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "rev": "nodemon rerver.js",
     "dev": "nodemon server.js"
   },
   "author": "niclas wormann",
@@ -20,9 +22,12 @@
     "mongoo": "^0.3.5",
     "mongoose": "^5.2.7",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "supertest": "^3.1.0"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
     "nodemon": "^1.17.5"
   }
 }

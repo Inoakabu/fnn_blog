@@ -13,6 +13,7 @@ module.exports = function(app, passport){
     });
 
     app.get('/profile', isLoggedIn, function(req,res){
+        
         res.render('./user/profile.ejs',{
             user : req.user //get User from session
         });
@@ -37,7 +38,7 @@ module.exports = function(app, passport){
     }));
 
     app.post('/login', passport.authenticate('local-login',{
-        successRedirect : '/profile',
+        successRedirect : '/',
         failureRedirect : '/login',
         failureMessage : true
     }))

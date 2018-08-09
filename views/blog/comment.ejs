@@ -2,6 +2,7 @@
         <div>
             <p><%= comment.comment %></p>
         </div>
+    <%if (isLoggedIn) { %>
     <div class="comment-helper">
         <!-- <code><%= post.uid %></code> -->
         <div class="flex">
@@ -9,4 +10,5 @@
             <%- include('deleteComment', {comment: comment}); %>
         </div>
     </div>
+    <% } %>
 </div>

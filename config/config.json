@@ -1,0 +1,14 @@
+{
+    "db": {
+        "ip":"localhost",
+        "port": 27017,
+        "name": "fnn_blog",
+        "collections": {
+            "posts": "fnn_blog",
+            "comments": "fnn_blog_comment"
+        }
+    },
+    "express": {
+        "port": 3000
+    }
+}

@@ -2,11 +2,15 @@
     <div>
         <h2><%= post.blogposttitle %></h2>
         <p><%= post.blogpost %></p>
-        <%- include('addcomment', { post: post }); %>
+        <h4>Comments:</h4>
+        <%if (isLoggedIn) { %>
+            <%- include('addcomment', { post: post }); %>
+         <% } %>
         <% post.comments.forEach(function(comment) { %>
             <%- include('comment', {comment:comment}); %>
         <% }); %>
     </div>
+    <%if (isLoggedIn) { %>
     <div class="post-helper">
         <!-- <code><%= post.uid %></code> -->
         <div class="flex">
@@ -14,4 +18,5 @@
             <%- include('delete', {post: post}); %>
         </div>
     </div>
+    <% } %>
 </div>
