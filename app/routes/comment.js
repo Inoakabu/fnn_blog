@@ -1,18 +1,13 @@
 const config = require('./../config/config.json'),
+    Schema = require('./../model/comment.js'),
     STATUSCODE = require('./../helper/StatusCodes').statuses;
 
 exports.create = (req, res, db) => {
-    db.collection(config.db.collections.comments)
-        .save({
-            content: req.body.comment_content,
-            post_id: req.body.post_id
-        }, (err, result) => {
-            if (err) res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
-            // console.log(result)               
-            console.log('[*] Info: Comment added to', result.ops[0].post_id, result.ops[0].id)
-            res.status(STATUSCODE.CREATED).json(result.ops[0])
-            db.close;
-        })
+    new Schema(req.body).save((err, comment) => {
+        if (err) res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
+        console.log(comment)
+        res.status(STATUSCODE.CREATED).json(comment)
+    });
 }
 
 exports.delete = (req, res, db) => {

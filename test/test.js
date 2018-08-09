@@ -17,17 +17,17 @@ describe("Post Tests", () => {
         request('http://localhost:' + config.express.port)
             .post('/post')
             .set('x-access-token', config.auth)
-            .send({ post_title: `Test Title ${new Date}`, post_content: `Post Test ${new Date}` })
+            .send({ title: `Test Title ${new Date}`, content: `Post Test ${new Date}` })
             .expect(STATUSCODE.CREATED)
             .end((err, res) => {
                 if (err)
                     return done(err)
-                postID = res.body.id;
+                postID = res.body._id;
                 done();
             })
     })
 
-    it(`POST /comment add a Comment in previous Post and should be Code 200`, (done) => {
+    it.skip(`POST /comment add a Comment in previous Post and should be Code 200`, (done) => {
         request('http://localhost:' + config.express.port)
             .post('/comment')
             .set('x-access-token', config.auth)
@@ -41,7 +41,7 @@ describe("Post Tests", () => {
             })
     })
 
-    it(`POST /comment add a second Comment in previous Post and should be Code 200`, (done) => {
+    it.skip(`POST /comment add a second Comment in previous Post and should be Code 200`, (done) => {
         request('http://localhost:' + config.express.port)
             .post('/comment')
             .set('x-access-token', config.auth)
@@ -57,7 +57,7 @@ describe("Post Tests", () => {
 });
 
 describe("Get Tests", () => {
-    it("GET / should be Code 200", (done) => {
+    it.skip("GET / should be Code 200", (done) => {
         request('http://localhost:' + config.express.port)
             .get('/')
             .expect(STATUSCODE.OK)
@@ -70,7 +70,7 @@ describe("Get Tests", () => {
     it("GET /post should be Code 200", (done) => {
         request('http://localhost:' + config.express.port)
             .get('/post')
-            .send({ post_id: postID })
+            .send({ _id: postID })
             .expect(STATUSCODE.OK)
             .end((err) => {
                 if (err)
@@ -85,7 +85,7 @@ describe("PUT Tests", () => {
         request('http://localhost:' + config.express.port)
             .put('/post')
             .set('x-access-token', config.auth)
-            .send({ post_id: postID, post_title: `NEW Test Title`, post_content: `NEW Content Test` })
+            .send({ _id: postID, title: `NEW Test Title`, content: `NEW Content Test` })
             .expect(STATUSCODE.OK)
             .end((err) => {
                 if (err)
@@ -93,7 +93,7 @@ describe("PUT Tests", () => {
                 done();
             })
     })
-    it(`PUT /comment and should be code 200`, (done) => {
+    it.skip(`PUT /comment and should be code 200`, (done) => {
         request('http://localhost:' + config.express.port)
             .put('/comment')
             .set('x-access-token', config.auth)
@@ -108,7 +108,7 @@ describe("PUT Tests", () => {
 });
 
 describe("DELETE Tests", () => {
-    it(`DELETE /comment second Comment in previous Post and should be code 200`, (done) => {
+    it.skip(`DELETE /comment second Comment in previous Post and should be code 200`, (done) => {
         request('http://localhost:' + config.express.port)
             .delete('/comment')
             .set('x-access-token', config.auth)
@@ -123,7 +123,7 @@ describe("DELETE Tests", () => {
     it(`DELETE /post previous Post and should be code 401`, (done) => {
         request('http://localhost:' + config.express.port)
             .delete('/post')
-            .send({ post_id: postID })
+            .send({ _id: postID })
             .expect(STATUSCODE.UNAUTHORIZED)
             .end((err) => {
                 if (err)
@@ -135,8 +135,8 @@ describe("DELETE Tests", () => {
         request('http://localhost:' + config.express.port)
             .delete('/post')
             .set('x-access-token', config.auth)
-            .send({ post_id: postID })
-            .expect(STATUSCODE.OK)
+            .send({ _id: postID })
+            .expect(STATUSCODE.NO_CONTENT)
             .end((err) => {
                 if (err)
                     return done(err)

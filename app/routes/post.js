@@ -1,63 +1,58 @@
 const config = require('./../config/config.json'),
+    Schema = require('./../model/post.js'),
     STATUSCODE = require('./../helper/StatusCodes').statuses;
 
 
-exports.get = (req, res, db) => {
-    db.collection(config.db.collections.posts)
-        .findOne({ id: req.body.post_id },
-            (err, result) => {
-                if (err) res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
-                console.log(result)
-                console.log('[*] Info: Post showed:', req.body.post_id)
-                res.status(STATUSCODE.OK).json(result)
-            })
-};
-
-exports.create = (req, res, db) => {
-    db.collection(config.db.collections.posts)
-        .save({
-            title: req.body.post_title,
-            content: req.body.post_content
-        }, (err, result) => {
-            if (err) res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
-            // console.log(result)               
-            console.log('[*] Info: Post saved', result.ops[0].id)
-            res.status(STATUSCODE.CREATED).json(result.ops[0])
-            db.close;
+exports.get = (req, res) => {
+    Schema.findById(req.body)
+        .then(post => {
+            console.log(post)
+            console.log('[*] Info: Post showed:', post.id)
+            res.status(STATUSCODE.OK).json(post)
         })
+        .catch(err => {
+            console.error(err);
+            res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
+        });
 };
 
-exports.delete = (req, res, db) => {
-    db.collection(config.db.collections.posts)
-        .findOneAndDelete({ post_id: req.body.post_id },
-            (err, result) => {
-                if (err) res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
-                // console.log(result)               
-                console.log('[*] Info: Post deleted:', req.body.post_id)
-            })
-    db.collection(config.db.collections.comments)
-        .remove({ post_id: req.body.post_id },
-            (err, result) => {
-                if (err) res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
-                // console.log(result)               
-                console.log('[*] Info: Comments from Post deleted:', req.body.post_id)
-                res.status(STATUSCODE.OK).end()
-                db.close;
-            })
-};
-
-exports.update = (req, res, db) => {
-    db.collection(config.db.collections.posts)
-        .findOneAndUpdate({ id: req.body.post_id }, {
-            $set: {
-                title: req.body.post_title,
-                content: req.body.post_content
-            }
-        }, (err, result) => {
-            if (err) res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
-            // console.log(result)
-            console.log('[*] Info: Post Updated:', result.value.id)
-            res.status(STATUSCODE.OK).json(result.value);
-            db.close;
+exports.create = (req, res) => {
+    Schema.create(req.body)
+        .then(post => {
+            console.log(post)
+            console.log('[*] Info: Post creted:', post._id)
+            res.status(STATUSCODE.CREATED).json(post)
         })
+        .catch(err => {
+            console.error(err);
+            res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
+        });
+};
+
+exports.delete = (req, res) => {
+    Schema.findByIdAndUpdate({ _id: req.body._id })
+		.then(post => {
+			if (!post) {
+				return res.status(STATUSCODE.NOT_FOUND).end()
+			}
+            res.status(STATUSCODE.NO_CONTENT).json(post)
+		})
+		.catch(err => {
+			console.error(err);
+            res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
+		});
+};
+
+exports.update = (req, res) => {
+    Schema.findByIdAndUpdate({ _id: req.body._id }, req.body)
+		.then(post => {
+			if (!post) {
+				return res.status(STATUSCODE.NOT_FOUND).end()
+			}
+            res.status(STATUSCODE.OK).json(post)
+		})
+		.catch(err => {
+			console.error(err);
+            res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json(err)
+		});
 }
