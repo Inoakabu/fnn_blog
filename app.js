@@ -15,7 +15,7 @@ const HTTP_ERROR = require('./api/helper/http-error')
 const logger = require("debug")("dev:app");
 const requestLogger = require("morgan");
 
-// app.use(requestLogger("dev"));
+app.use(requestLogger("dev"));
 
 /**
  * Mongo DB
@@ -60,6 +60,8 @@ app.use((req, res, next) => {
  */
 const postRoute = require("./api/routes/post");
 const commentRoute = require("./api/routes/comment");
+const mainRoute = require("./api/routes/main");
+app.use("/", mainRoute);
 app.use("/post", postRoute);
 app.use("/comment", commentRoute);
 

@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
  * Logger
  */
 const logger = require("debug")("dev:post");
+const error = require("debug")("dev:post:error");
 
 /**
  * Config and Helpers
@@ -21,12 +22,9 @@ const feedback = require('./../helper/feedback')
 const Post = require("../models/post");
 
 
-/**
- * Get all Posts handler
- */
 router.get("/", (req, res, next) => {
     Post.find()
-        .select("comments content _id")
+        .select("comments content")
         .populate('comments')
         .exec()
         .then(items => {
@@ -34,36 +32,25 @@ router.get("/", (req, res, next) => {
                 count: items.length,
                 posts: items.map(item => new feedback(item, { route: 'post', id: true }).all())
             })
-        })
+        }).catch(err => {
+            logger(err.message);
+            next(new HTTP_ERROR('Check the input.', STATUSCODE.SERVER_ERROR));
+            return
+        });
 });
 
-/**
- * Get all Posts handler
- */
-router.get("/:id", (req, res, next) => {
-    Post.findById(req.params.id)
-        .populate('comments', 'content')
-        .exec()
-        .then(item => {
-            res.status(STATUSCODE.OK).json(new feedback(item, { route: 'post', id: true }).all())
-        })
-});
-
-/**
- * Post a Post handler
- */
 router.post("/", (req, res, next) => {
     const post = new Post({
-        _id: mongoose.Types.ObjectId(),
+        _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
         content: req.body.content
     });
     post.save()
         .then(item => {
             logger(`Post saved: ${item._id}`)
-            res.status(STATUSCODE.OK).json(new feedback(item, { route: 'post', id: true }).created())
+            res.status(STATUSCODE.CREATED).json(new feedback(item, { route: 'post', id: true }).created())
         }).catch(err => {
-            logger(err.message);
+            error(err.message);
             next(new HTTP_ERROR('Check the input.', STATUSCODE.SERVER_ERROR));
             return
         });
@@ -74,12 +61,13 @@ router.get("/:id", (req, res, next) => {
         .exec()
         .then(item => {
             if (!item) {
-                next(new HTTP_ERROR("Post not found.", STATUSCODE.NOT_FOUND))
-                return
+                let err = new HTTP_ERROR("Post not found.", STATUSCODE.NOT_FOUND)
+                error(err.message);
+                next(err)
             }
             res.status(STATUSCODE.OK).json(new feedback(item, { type: "get", route: 'post' }).found())
         }).catch(err => {
-            logger(err.message);
+            error(err.message);
             next(new HTTP_ERROR('Check the input.', STATUSCODE.SERVER_ERROR));
             return
         });
@@ -90,30 +78,32 @@ router.delete("/:id", (req, res, next) => {
         .exec()
         .then(item => {
             if (!item) {
-                next(new HTTP_ERROR("Post not found.", STATUSCODE.NOT_FOUND))
-                return
+                let err = new HTTP_ERROR("Post not found.", STATUSCODE.NOT_FOUND)
+                error(err.message);
+                next(err)
             }
             logger(`Post deleted: ${item._id}`)
-            res.status(STATUSCODE.OK).json(new feedback(item, { type: "post", route: 'post', body: { title: "String", content: "String" } }).deleted())
+            res.status(STATUSCODE.NO_CONTENT).json(new feedback(item, { type: "post", route: 'post', body: { title: "String", content: "String" } }).deleted())
         }).catch(err => {
-            logger(err.message);
+            error(err.message);
             next(new HTTP_ERROR('Check the input.', STATUSCODE.SERVER_ERROR));
             return
         });
 });
 
 router.put("/:id", (req, res, next) => {
-        Post.findByIdAndUpdate(req.params.id, req.body)
+    Post.findByIdAndUpdate(req.params.id, req.body)
         .exec()
         .then(item => {
             if (!item) {
-                next(new HTTP_ERROR("Post not found.", STATUSCODE.NOT_FOUND))
-                return
+                let err = new HTTP_ERROR("Post not found.", STATUSCODE.NOT_FOUND)
+                error(err.message);
+                next(err)
             }
             logger(`Post updated: ${item._id}`)
             res.status(STATUSCODE.OK).json(new feedback(item, { route: 'post', id: true }).updated())
         }).catch(err => {
-            logger(err.message);
+            error(err.message);
             next(new HTTP_ERROR('Check the input.', STATUSCODE.SERVER_ERROR));
             return
         });
@@ -128,13 +118,18 @@ router.patch("/:id", (req, res, next) => {
         .exec()
         .then(item => {
             if (!item) {
-                next(new HTTP_ERROR("Post not found.", STATUSCODE.NOT_FOUND))
+                let err = new HTTP_ERROR("Post not found.", STATUSCODE.NOT_FOUND)
+                error(err.message);
+                next(err)
                 return
             }
             logger(`Post patched: ${item._id}`)
-            res.status(STATUSCODE.OK).json(new feedback(item, { route: 'post', id: true }).patched())
+            Post.findById(item._id)
+                .exec()
+                .then(item => res.status(STATUSCODE.OK).json(new feedback(item, { route: 'post', id: true }).patched()))
+
         }).catch(err => {
-            logger(err.message);
+            error(err.message);
             next(new HTTP_ERROR('Check the input.', STATUSCODE.SERVER_ERROR));
             return
         });

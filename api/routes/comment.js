@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
  * Logger
  */
 const logger = require("debug")("dev:comment");
+const error = require("debug")("dev:comment:error");
 
 /**
  * Config and Helpers
@@ -22,12 +23,9 @@ const Comment = require("../models/comment");
 const Post = require("../models/post");
 
 
-/**
- * Get all Comments handler
- */
 router.get("/", (req, res, next) => {
     Comment.find()
-        .select("content _id")
+        .select("content")
         .populate('post', 'title content')
         .exec()
         .then(items => {
@@ -46,36 +44,36 @@ router.get("/", (req, res, next) => {
         });
 });
 
-/**
- * Get all Comments handler
- */
 router.get("/:id", (req, res, next) => {
     Comment.findById(req.params.id)
-        // .select("content _id")
         .populate('post', 'title content')
         .exec()
         .then(item => {
-            let back = new feedback(item, { route: 'comment', id: true }).all();
-            back.entry.post = new feedback(item.post, { route: 'post', id: true }).all()
-            res.status(STATUSCODE.OK).json(back)
+            if (!item) {
+                let err = new HTTP_ERROR("Comment not found.", STATUSCODE.NOT_FOUND)
+                error(err.message);
+                next(err)
+                return
+            }
+            res.status(STATUSCODE.OK).json(new feedback(item, { type: "get", route: 'post' }).found())
         }).catch(err => {
             logger(err.message);
             next(new HTTP_ERROR('Check the input.', STATUSCODE.SERVER_ERROR));
             return
         });
 });
-/**
- * Post a Post handler
- */
+
 router.post("/:id", (req, res, next) => {
     Post.findById(req.params.id)
         .then(item => {
             if (!item) {
-                next(new HTTP_ERROR("Post not found.", STATUSCODE.NOT_FOUND))
+                let err = new HTTP_ERROR("Post not found.", STATUSCODE.NOT_FOUND)
+                error(err.message);
+                next(err)
                 return
             }
             const comment = new Comment({
-                _id: mongoose.Types.ObjectId(),
+                _id: new mongoose.Types.ObjectId(),
                 content: req.body.content,
                 post: req.params.id
             });
@@ -84,9 +82,9 @@ router.post("/:id", (req, res, next) => {
             return comment.save();
         }).then(item => {
             logger(`Comment saved: ${item._id}`)
-            res.status(STATUSCODE.OK).json(new feedback(item, { route: 'comment', id: true }).created())
+            res.status(STATUSCODE.CREATED).json(new feedback(item, { route: 'comment', id: true }).created())
         }).catch(err => {
-            logger(err.message);
+            error(err.message);
             next(new HTTP_ERROR('Check the input.', STATUSCODE.SERVER_ERROR));
             return
         });
@@ -97,13 +95,15 @@ router.delete("/:id", (req, res, next) => {
         .exec()
         .then(item => {
             if (!item) {
-                next(new HTTP_ERROR("Comment not found.", STATUSCODE.NOT_FOUND))
+                let err = new HTTP_ERROR("Comment not found.", STATUSCODE.NOT_FOUND)
+                error(err.message);
+                next(err)
                 return
             }
             logger(`Comment deleted: ${item._id}`)
-            res.status(STATUSCODE.OK).json(new feedback(item, { type: "post", route: 'comment', body: { title: "String", content: "String" } }).deleted())
+            res.status(STATUSCODE.NO_CONTENT).json(new feedback(item, { type: "post", route: 'comment', body: { title: "String", content: "String" } }).deleted())
         }).catch(err => {
-            logger(err.message);
+            error(err);
             next(new HTTP_ERROR('Check the input.', STATUSCODE.SERVER_ERROR));
             return
         });
@@ -114,13 +114,15 @@ router.put("/:id", (req, res, next) => {
         .exec()
         .then(item => {
             if (!item) {
-                next(new HTTP_ERROR("Comment not found.", STATUSCODE.NOT_FOUND))
+                let err = new HTTP_ERROR("Comment not found.", STATUSCODE.NOT_FOUND)
+                error(err.message);
+                next(err)
                 return
             }
             logger(`Comment updated: ${item._id}`)
             res.status(STATUSCODE.OK).json(new feedback(item, { route: 'comment', id: true }).updated())
         }).catch(err => {
-            logger(err.message);
+            error(err);
             next(new HTTP_ERROR('Check the input.', STATUSCODE.SERVER_ERROR));
             return
         });
@@ -135,13 +137,15 @@ router.patch("/:id", (req, res, next) => {
         .exec()
         .then(item => {
             if (!item) {
-                next(new HTTP_ERROR("Comment not found.", STATUSCODE.NOT_FOUND))
+                let err = new HTTP_ERROR("Comment not found.", STATUSCODE.NOT_FOUND)
+                error(err.message);
+                next(err)
                 return
             }
             logger(`Comment patched: ${item._id}`)
             res.status(STATUSCODE.OK).json(new feedback(item, { route: 'comment', id: true }).patched())
         }).catch(err => {
-            logger(err.message);
+            error(err);
             next(new HTTP_ERROR('Check the input.', STATUSCODE.SERVER_ERROR));
             return
         });
