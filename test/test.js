@@ -1,13 +1,10 @@
 const expect = require('chai').expect
     http = require('http'),
     request = require('supertest'),
-    config = require('./../app/config/config.json'),
-    STATUSCODE = require('./../app/helper/StatusCodes').statuses;
+    config = require('./../api/config/config.json'),
+    STATUSCODE = require('./../api/helper/http-codes'),
 
-
-beforeEach(function () {
-    // setTimeout(3000)
-})
+    url = `'http://localhost:' + ${config.http.port}`
 
 let post;
 let comment;
@@ -15,7 +12,7 @@ let content = `Comment Test #2 ABC`
 
 describe("Post Tests", () => {
     it(`POST /post should be Code 200`, (done) => {
-        request('http://localhost:' + config.express.port)
+        request(url)
             .post('/post')
             .set('x-access-token', config.auth)
             .send({ title: `Test Title ${new Date}`, content: `Post Test ${new Date}` })
@@ -29,7 +26,7 @@ describe("Post Tests", () => {
     })
 
     it(`POST /comment add a Comment in previous Post and should be Code 200`, (done) => {
-        request('http://localhost:' + config.express.port)
+        request(url)
             .post('/comment')
             .set('x-access-token', config.auth)
             .send({ content: `Comment Test #1 ${new Date}`, post_id: post._id })
@@ -42,7 +39,7 @@ describe("Post Tests", () => {
     })
 
     it(`POST /comment add a second Comment in previous Post and should be Code 200`, (done) => {
-        request('http://localhost:' + config.express.port)
+        request(url)
             .post('/comment')
             .set('x-access-token', config.auth)
             .send({ content: content, post_id: post._id })
@@ -57,7 +54,7 @@ describe("Post Tests", () => {
 });
 describe("GET Tests", () => {
     it("GET / should be Code 200", (done) => {
-        request('http://localhost:' + config.express.port)
+        request(url)
             .get('/')
             .expect(STATUSCODE.OK)
             .end((err) => {
@@ -67,7 +64,7 @@ describe("GET Tests", () => {
             })
     })
     it("GET /post should be Code 200", (done) => {
-        request('http://localhost:' + config.express.port)
+        request(url)
             .get('/post')
             .send({ _id: post._id })
             .expect(STATUSCODE.OK)
@@ -78,7 +75,7 @@ describe("GET Tests", () => {
             })
     })
     it("GET /comment second Comment should be Code 200", (done) => {
-        request('http://localhost:' + config.express.port)
+        request(url)
             .get('/comment')
             .send({ _id: comment._id })
             .expect(STATUSCODE.OK)
@@ -93,7 +90,7 @@ describe("GET Tests", () => {
 
 describe("PUT Tests", () => {
     it(`PUT /post and should be code 200`, (done) => {
-        request('http://localhost:' + config.express.port)
+        request(url)
             .put('/post')
             .set('x-access-token', config.auth)
             .send({ _id: post._id, title: `NEW Test Title`, content: `NEW Content Test` })
@@ -105,7 +102,7 @@ describe("PUT Tests", () => {
             })
     })
     it(`PUT /comment and should be code 200`, (done) => {
-        request('http://localhost:' + config.express.port)
+        request(url)
             .put('/comment')
             .set('x-access-token', config.auth)
             .send({ _id: comment._id, content: `NEW Comment content Test` })
@@ -120,7 +117,7 @@ describe("PUT Tests", () => {
 
 describe("DELETE Tests", () => {
     it(`DELETE /comment second Comment in previous Post and should be code 200`, (done) => {
-        request('http://localhost:' + config.express.port)
+        request(url)
             .delete('/comment')
             .set('x-access-token', config.auth)
             .send({ _id: comment._id })
@@ -132,7 +129,7 @@ describe("DELETE Tests", () => {
             })
     })
     it(`DELETE /post previous Post and should be code 401`, (done) => {
-        request('http://localhost:' + config.express.port)
+        request(url)
             .delete('/post')
             .send({ _id: post._id })
             .expect(STATUSCODE.UNAUTHORIZED)
@@ -143,7 +140,7 @@ describe("DELETE Tests", () => {
             })
     })
     it(`DELETE /post previous Post and should be code 200`, (done) => {
-        request('http://localhost:' + config.express.port)
+        request(url)
             .delete('/post')
             .set('x-access-token', config.auth)
             .send({ _id: post._id })
