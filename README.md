@@ -26,8 +26,8 @@ First of all - many thanks to @stefan0uh
 
 #### Usermanagment
 - [x] Login
-- [ ] Password Handling
-- [ ] Security & Access & Permissions
+- [-] Password Handling
+- [-] Security & Access & Permissions
 - [x] Userprofil
 
 #### Admin Env
