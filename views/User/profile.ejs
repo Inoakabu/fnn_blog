@@ -6,15 +6,16 @@
                 <h1><span class="fa fa-anchor"></span> Profile Page</h1>
                 <a href="/logout" class="btn btn-default btn-sm">Logout</a>
                 <a href="/profile/permission" class="btn btn-default btn-sm">Permissions</a>
+                <a href="/">Back</a>
             </div>
         
             <div class="row">
         
                 <!-- LOCAL INFORMATION -->
                 <div class="col-sm-6">
-                    <div class="well">
+                    <div class="well">                        
                         <h3><span class="fa fa-user"></span> Local</h3>
-        
+                                
                             <p>
                                 <strong>id</strong>: <%= user._id %><br>
                                 <strong>email</strong>: <%= user.local.email %><br>

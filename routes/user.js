@@ -49,6 +49,7 @@ module.exports = function(app, passport){
     })
 
     app.get('/logout', function(req,res){
+        console.log('User logged out')
         req.logOut();
         req.session.destroy();
         res.redirect('/');
