@@ -1,0 +1,36 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: fnn
+  namespace: fnn
+  labels:
+    task: frontend
+spec:
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        app: fnn
+        tier: production
+    spec:
+      containers:
+      - name: fnn-node
+        image: dreg.semicode.de/fnn:v0.1.11
+        ports:
+        - containerPort: 3000
+      imagePullSecrets:
+      - name: registrypullsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: fnn
+  name: fnn
+  labels:
+    app: fnn
+spec:
+  ports:
+  - port: 3000
+  selector:
+    app: fnn
+    tier: production

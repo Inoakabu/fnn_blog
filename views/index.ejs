@@ -12,6 +12,7 @@
     <link rel="stylesheet" type "text/css" href="/stylesheets/partial/header.css">
     <link rel="stylesheet" type "text/css" href="/stylesheets/partial/marginal.css">
     <link rel="stylesheet" type "text/css" href="/stylesheets/partial/footer.css">
+    <meta NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW">
 </head>
 <body>
     <script>
@@ -29,7 +30,7 @@
         <div class="flex">
             <div class="left">
             <%if (isLoggedIn) { %>
-                <% include partial/addPost %>
+                <% include partial/addpost %>
             <% } %>
 
                     <% fnn_blog.forEach(function(post) { %>

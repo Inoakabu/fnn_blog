@@ -11,7 +11,7 @@ const dbURL = require('./config/dbURL').dbURL
 /**
  * MongoDb Connection
  */
-mongoose.connect(`mongodb://${config.db.ip}:${config.db.port}/${config.db.name}`, { useNewUrlParser: true }, (err) => {
+mongoose.connect(`mongodb://mongodb-service.database.svc.cluster.local:27017/fnn_blog`, { useNewUrlParser: true }, (err) => {
     if (err) {
         console.log("[!] First start the DB. " +err)
         process.exit();

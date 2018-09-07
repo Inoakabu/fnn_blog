@@ -1,6 +1,6 @@
 {
     "db": {
-        "ip":"localhost",
+        "ip":"mongod-0.mongodb-service.database.svc.cluster.local,mongod-1.mongodb-service.database.svc.cluster.local,mongod-2.mongodb-service.database.svc.cluster.local:27017",
         "port": 27017,
         "name": "fnn_blog",
         "collections": {
