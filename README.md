@@ -1,6 +1,7 @@
 # Fabbys News Network Blog
 
-First of all - many thanks to @stefan0uh
+First of all - many thanks to [@stefan0uh](https://github.com/stefan0uh) and [@playgroundplaying](https://github.com/playgroundplaying)
+
 
 ## Roadmap:
 
@@ -8,6 +9,7 @@ First of all - many thanks to @stefan0uh
 
 ### Prio 1
 - [ ] add Helmet
+
 #### Post
 - [x] show
 - [x] delete
@@ -40,7 +42,7 @@ First of all - many thanks to @stefan0uh
 
 #### Cleaning
 - [ ] Clean up code
-- [ ] define router, controllers, helpers, middlewares, models / if needed in separate folders to got more structure
+- [x] define router, controllers, helpers, middlewares, models / if needed in separate folders to got more structure
 
 ----------
 
