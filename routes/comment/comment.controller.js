@@ -8,12 +8,13 @@ const dbConf = new Config().db;
 module.exports = (router, db) => {
     router.route('/comment')
         .post((req, res) => {
+            console.log(req.body)
             const oHex = new ObjectID().toHexString();
             const nHex = new ObjectID.createFromHexString(oHex).toHexString();
             db.collection(dbConf.collections.comments)
                 .save({
                     id: nHex,
-                    content: req.body.comment_content,
+                    content: req.body.content,
                     post_id: req.body.post_id
                 }, (err, result) => {
                     if (err) res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(err)
@@ -38,7 +39,7 @@ module.exports = (router, db) => {
             db.collection(dbConf.collections.comments)
                 .findOneAndUpdate({ id: req.body.comment_id }, {
                     $set: {
-                        content: req.body.comment_content
+                        content: req.body.content
                     }
                 }, (err, result) => {
                     if (err) res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(err)

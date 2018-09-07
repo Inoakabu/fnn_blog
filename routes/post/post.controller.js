@@ -6,15 +6,17 @@ const { HTTP_STATUS } = require('../../utils');
 const dbConf = new Config().db;
 
 module.exports = (router, db) => {
+    console.log("hallo?")
     router.route('/post')
         .post((req, res) => {
+            console.log(req.body)
             const oHex = new ObjectID().toHexString();
             const nHex = new ObjectID.createFromHexString(oHex).toHexString();
             db.collection(dbConf.collections.posts)
                 .save({
                     id: nHex,
-                    title: req.body.post_title,
-                    content: req.body.post_content
+                    title: req.body.title,
+                    content: req.body.content
                 }, (err, result) => {
                     if (err) res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(err)
                     // console.log(result)               
@@ -24,8 +26,9 @@ module.exports = (router, db) => {
                 })
         })
         .delete((req, res) => {
+            console.log(req.body)
             db.collection(dbConf.collections.posts)
-                .findOneAndDelete({ post_id: req.body.post_id },
+                .findOneAndDelete({ id: req.body.post_id },
                     (err, result) => {
                         if (err) res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(err)
                         // console.log(result)               
@@ -42,6 +45,7 @@ module.exports = (router, db) => {
                     })
         })
         .put((req, res) => {
+            console.log(req.body)
             db.collection(dbConf.collections.posts)
                 .findOneAndUpdate({ id: req.body.post_id }, {
                     $set: {
@@ -52,7 +56,7 @@ module.exports = (router, db) => {
                     if (err) res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(err)
                     // console.log(result)
                     console.log('[*] Info: Post Updated:', result.value.id)
-                    res.status(HTTP_STATUS.OK).json(result.value);
+                    res.status(HTTP_STATUS.OK).json(result)
                     db.close;
                 })
         });

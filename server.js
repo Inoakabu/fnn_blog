@@ -2,7 +2,9 @@ const express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
+    path = require('path'),
     glob = require("glob"),
+    expressVue = require('express-vue'),
     session = require('express-session'),
     passport = require('passport'),
 
@@ -19,6 +21,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+const vueOptions = {
+    rootPath: path.join(__dirname, "routes")
+};
+
+const expressVueMiddleware = expressVue.init(vueOptions);
+app.use(expressVueMiddleware);
 
 app.use(session({
     name: "session",

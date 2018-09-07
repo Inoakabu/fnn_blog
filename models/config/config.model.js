@@ -4,7 +4,7 @@ const path = require("path");
 class Config {
     constructor() {
         this.app = {
-            name: "Fabbys Twitter Overlay",
+            name: "Fabby's News Network"
         };
         this.server = {
             root: path.normalize(__dirname + "/.."),

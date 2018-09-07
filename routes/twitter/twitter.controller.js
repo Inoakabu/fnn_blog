@@ -6,7 +6,6 @@ const {
 const { HTTP_STATUS } = require("../../utils");
 const twitterConf = new Config().twitter;
 const Twitter = require('twitter')(twitterConf.oauth);
-
 /**
  * Main Route Contoller
  * @param {object} router
