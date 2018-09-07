@@ -3,6 +3,20 @@
 First of all - many thanks to [@stefan0uh](https://github.com/stefan0uh) and [@playgroundplaying](https://github.com/playgroundplaying)
 
 
+## Twitter - API
+The `oAuth` from twitter is read by the environment.
+
+```
+TWCO_KEY={consumer_key}
+TWCO_SECRET={consumer_secret}
+ACTO_KEY={access_token_key}
+ACTO_SECRET={access_token_secret}
+```
+
+https://developer.twitter.com/en/docs/basics/authentication/api-reference/request_token.html
+
+
+
 ## Roadmap:
 
 ----------
