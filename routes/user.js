@@ -4,12 +4,12 @@ var crypto = require('crypto');
 module.exports = function(app, passport){
 
     app.get('/login',function(req,res){
-        console.log('login check')
+        console.log('[!] Login check')
         res.render('./user/login.ejs', { message : req.message });
     });
 
     app.get('/signup',function(req,res){
-        console.log('signup check')
+        console.log('[!] Signup check')
         res.render('./user/signup.ejs');
     });
 
@@ -36,9 +36,9 @@ module.exports = function(app, passport){
         User.findOne({ _id : req.params.id
                     , resetPasswordToken : req.params.token
                     , resetPasswordExpires : { $gt: Date.now() } }, function(err,user){
-                        console.log(user);
+                        //console.log(user);
                         if(!user){
-                            console.log('error - No reset token found or expired');
+                            console.log('[!] error - No reset token found or expired');
                             return res.redirect('/profile');
                         }else{
                         res.render('./user/renewPassword.ejs',{
@@ -49,7 +49,7 @@ module.exports = function(app, passport){
     })
 
     app.get('/logout', function(req,res){
-        console.log('User logged out')
+        console.log('[!] User logged out')
         req.logOut();
         req.session.destroy();
         res.redirect('/');
@@ -103,7 +103,7 @@ module.exports = function(app, passport){
             let redirectURL = '/renewPassword/' + req.params.id + '/' + user.resetPasswordToken
             return user.save(function(err){
                 if(!err){
-                    console.log("Token set" + user.resetPasswordToken);
+                    console.log("[!] Token set" + user.resetPasswordToken);
                     return res.redirect(redirectURL)
                 }else{
                     console.log(err)
@@ -122,17 +122,17 @@ module.exports = function(app, passport){
                 let password    = req.body.oldPassword;
                 let newPassword = req.body.newPassword;
             if(!user.validPassword(password)){
-                console.log('old password not matching');
+                console.log('[!] old password not matching');
                 res.redirect(redirectURL);
             }else if(req.body.newPassword != req.body.confirmNewPassword){
-                console.log('new password not confirmed');
+                console.log('[!] new password not confirmed');
                 res.redirect(redirectURL);
             }else {
                 user.local.password = user.generateHash(newPassword);
 
                 user.save(function(err){
                     if (!err){
-                        console.log("password changed");
+                        console.log("[!] password changed");
                     }else{
                         console.log(err)
                     }

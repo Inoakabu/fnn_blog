@@ -30,10 +30,10 @@ module.exports = function(passport){
             if(err)
                 return done(err);
             if(user) {
-                console.log('E-mail allready taken')
-                return done(null, false, { message : 'E-mail allready taken'});
+                console.log('[!] E-mail allready taken')
+                return done(null, false, { message : '[!] E-mail allready taken'});
             } else {
-                console.log('hitting signup routin')
+                console.log('[!] hitting signup routin')
                 var newUser = new User();
                 
                 newUser.local.email = email;
@@ -68,12 +68,12 @@ module.exports = function(passport){
                 return done(err);
 
             if(!user){
-                console.log('E-Mail not found.');
-                return done(null, false, {message : 'E-Mail not found.' });
+                console.log('[!] E-Mail not found.');
+                return done(null, false, {message : '[!] E-Mail not found.' });
             }
             if(!user.validPassword(password)){
-                console.log('Invalid Password.');
-                return done(null, false, { message : 'Invalid Password.' });
+                console.log('[!] Invalid Password.');
+                return done(null, false, { message : '[!] Invalid Password.' });
             }
             return done(null, user);
         });
