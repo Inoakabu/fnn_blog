@@ -16,6 +16,9 @@ spec:
       containers:
       - name: fnn-node
         image: dreg.semicode.de/fnn:v0.1.11
+        env:
+          - name: MONGOURL
+            value: mongodb://mongodb-service.database.svc.cluster.local:27017/fnn_blog
         ports:
         - containerPort: 3000
       imagePullSecrets:

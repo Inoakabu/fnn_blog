@@ -8,10 +8,15 @@ const passport = require('passport');
 const session = require('express-session');
 const dbURL = require('./config/dbURL').dbURL
 
+
+let mongoURL = "mongodb://localhost:27017/fnn_blog";
+if(process.env.MONGOURL){
+    mongoURL = process.env.MONGOURL;
+}
 /**
  * MongoDb Connection
  */
-mongoose.connect(`mongodb://mongodb-service.database.svc.cluster.local:27017/fnn_blog`, { useNewUrlParser: true }, (err) => {
+mongoose.connect(mongoURL, { useNewUrlParser: true }, (err) => {
     if (err) {
         console.log("[!] First start the DB. " +err)
         process.exit();
