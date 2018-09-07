@@ -2,10 +2,11 @@ const {
     Config,
     TweetModel
 } = require("../../models");
+
 const { HTTP_STATUS } = require("../../utils");
 const twitterConf = new Config().twitter;
 const Twitter = require('twitter')(twitterConf.oauth);
-console.log(twitterConf)
+
 /**
  * Main Route Contoller
  * @param {object} router
@@ -29,6 +30,6 @@ module.exports = (router) => {
                 console.warn(err)
                 res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(err)
             }
-        },
+        }
     );
 };

@@ -48,6 +48,8 @@ const db = mongoose.connection;
 
 app.use("/", router);
 
+
+// Reads the `Routes`-folder and require
 let controllers = glob.sync('./routes/**/*.js');
 controllers.forEach((controller) => {
     module.require(controller)(router, db, passport);
