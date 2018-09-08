@@ -6,10 +6,9 @@ const ObjectID = require('mongodb').ObjectID
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
-const dbURL = require('./config/dbURL').dbURL
 
 
-let mongoURL = "mongodb://localhost:27017/fnn_blog";
+let mongoURL = config.db.devCon;
 if(process.env.MONGOURL){
     mongoURL = process.env.MONGOURL;
 }
@@ -52,6 +51,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./routes/user')(app, passport);
+require('./routes/admin')(app, passport);
 
 app.get('/', (req, res) => {
     db.collection('fnn_blog')
@@ -74,7 +74,7 @@ app.get('/', (req, res) => {
         ]).toArray(function (err, result) {
             if (err) return console.log(err)
             // console.log(JSON.stringify(result));
-            res.render('index.ejs', { fnn_blog: result, isLoggedIn: req.isAuthenticated() })
+            res.render('index.ejs', { fnn_blog: result, isLoggedIn: req.isAuthenticated(), isAdmin: req.isAdmin === true })
             db.close;
         })
 });
@@ -202,4 +202,9 @@ function isLoggedIn(req, res, next) {
     // if they aren't redirect them to the home page
     console.log('You are not authenticated, please login')
     res.redirect('/');
+};
+function isAdmin(req,res,next) {
+    if (req.user.isAdmin === true)
+        return next();
+    res.redirect('/profile');
 };

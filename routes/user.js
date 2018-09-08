@@ -8,6 +8,7 @@ module.exports = function(app, passport){
         res.render('./user/login.ejs', { message : req.message });
     });
 
+    // need to be deleted after admin route addUser is done
     app.get('/signup',function(req,res){
         console.log('[!] Signup check')
         res.render('./user/signup.ejs');
@@ -69,10 +70,11 @@ module.exports = function(app, passport){
 
     app.post('/profile/editProfile/:id', isLoggedIn, function(req,res){
         return User.findById(req.params.id, function(err, user){
-            user.name = req.body.nameEdit;
-            user.lastName = req.body.lastNameEdit;
-            user.department = req.body.departmentEdit;
-            user.companyId = req.body.companyIdEdit;
+            user.name           = req.body.nameEdit;
+            user.lastName       = req.body.lastNameEdit;
+            user.department     = req.body.departmentEdit;
+            user.companyId      = req.body.companyIdEdit;
+            user.isAdmin        = req.body.isAdminEdit;
  
             return user.save(function(err){
                 if (!err){
@@ -86,14 +88,6 @@ module.exports = function(app, passport){
     });
 
     app.post('/renewPassword/:id', isLoggedIn, function(req,res){
-        // TODO:
-        // 0. only already logged in users can change PW by them self
-        // 0.1. if user forgot PW "forgot password" will send a mail
-        // to an admin or so
-        // 1. set ResetToken + expire
-        // 1.2. check old Password before do any changes
-        // 2. confirm new Password
-        // 2.1. bcrypt hash new password ON save
 
         return User.findById(req.params.id, function(err, user){
 
@@ -141,6 +135,10 @@ module.exports = function(app, passport){
             }
         })
     })
+
+    app.get('/cthulhu', isAdmin, (req,res) => {
+        res.render('admin/adminPanel.ejs')
+    })
 }
 
 // route middleware to make sure a user is logged in
@@ -153,3 +151,9 @@ function isLoggedIn(req, res, next) {
     // if they aren't redirect them to the home page
     res.redirect('/');
 };
+
+function isAdmin(req,res,next) {
+    if (req.user.isAdmin === true)
+        return next();
+    res.redirect('/profile');
+}

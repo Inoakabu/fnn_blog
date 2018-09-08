@@ -31,6 +31,9 @@ First of all - many thanks to @stefan0uh
 - [x] Userprofil
 
 #### Admin Env
+- [ ] Create Admin User on App start
+- [ ] Adding Admin route
+- [ ] handle create User only as admin
 - [ ] Security & Handling
 - [ ] Acccess to configs
 - tbh

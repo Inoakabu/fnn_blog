@@ -6,7 +6,8 @@
         "collections": {
             "posts": "fnn_blog",
             "comments": "fnn_blog_comment"
-        }
+        },
+        "devCon": "mongodb://localhost:27017/fnn_blog"
     },
     "express": {
         "port": 3000

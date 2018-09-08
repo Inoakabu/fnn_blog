@@ -38,10 +38,11 @@ module.exports = function(passport){
                 
                 newUser.local.email = email;
                 newUser.local.password = newUser.generateHash(password);
-                newUser.name = 'Name goes here';
-                newUser.lastName = 'last name goes here';
-                newUser.department = 'department goes here';
-                newUser.companyId = 'companyId goes here';
+                newUser.name            = 'Name goes here';
+                newUser.lastName        = 'last name goes here';
+                newUser.department      = 'department goes here';
+                newUser.companyId       = 'companyId goes here';
+                newUser.role            = 'user';
 
                     newUser.save(function(err){
                         if(err)
