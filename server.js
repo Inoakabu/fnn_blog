@@ -6,6 +6,7 @@ const ObjectID = require('mongodb').ObjectID
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
+const checkAuth = require('./routes/user').isAuthenticated;
 
 
 let mongoURL = config.db.devCon;
@@ -84,11 +85,15 @@ app.post('/addpost', isLoggedIn, (req, res) => {
     var originalHex = objectId.toHexString();
     var newObjectId = new ObjectID.createFromHexString(originalHex);
     var newHex = newObjectId.toHexString();
+    var currentDate = new Date();
     db.collection('fnn_blog')
         .save({
-            blogposttitle: req.body.blogposttitle,
-            blogpost: req.body.blogpost,
-            uid: newHex
+            blogposttitle:  req.body.blogposttitle,
+            blogpost:       req.body.blogpost,
+            uid:            newHex,
+            postingDate:    currentDate,
+            postedBy:       req.user.name,
+            updated:        false
         }, (err, result) => {
             if (err) return console.log(err)
             console.log('[*] Info: Post saved')
@@ -102,11 +107,15 @@ app.post('/addcomment', isLoggedIn, (req, res) => {
     var originalHex = objectId.toHexString();
     var newObjectId = new ObjectID.createFromHexString(originalHex);
     var newHex = newObjectId.toHexString();
+    var currentDate = new Date();
     db.collection('fnn_blog_comment')
         .save({
-            comment: req.body.comment,
-            commentid: newHex,
-            linkid: req.body.uid
+            comment:        req.body.comment,
+            commentid:      newHex,
+            linkid:         req.body.uid,
+            postingDate:    currentDate,
+            postedBy:       req.user.name,
+            updated:        false
         }, (err, result) => {
             if (err) return console.log(err)
 
@@ -124,8 +133,9 @@ app.post('/updatePost', isLoggedIn, (req, res) => {
                 uid: req.body.findBlogPost //query, lookup
             }, {
                 $set: {
-                    blogposttitle: req.body.replaceBlogPostTitle,
-                    blogpost: req.body.replaceBlogPost
+                    blogposttitle:  req.body.replaceBlogPostTitle,
+                    blogpost:       req.body.replaceBlogPost,
+                    updated:        true
                 } // update statement
             },
             (err, result) => {
@@ -144,7 +154,8 @@ app.post('/updateComment', isLoggedIn, (req, res) => {
                 commentid: req.body.findComment //query, lookup
             }, {
                 $set: {
-                    comment: req.body.replaceComment
+                    comment: req.body.replaceComment,
+                    updated: true
                 } // update statement
             },
             (err, result) => {

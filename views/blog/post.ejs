@@ -2,6 +2,8 @@
     <div>
         <h2><%= post.blogposttitle %></h2>
         <p><%= post.blogpost %></p>
+        <p> posted: <%= post.postingDate %></p>
+        <p> posted by: <%= post.postedBy %></p>
         <h4>Comments:</h4>
         <%if (isLoggedIn) { %>
             <%- include('addcomment', { post: post }); %>

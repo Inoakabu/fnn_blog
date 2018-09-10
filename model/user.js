@@ -6,7 +6,7 @@ var userSchema = mongoose.Schema({
         email        : String,
         password     : String,
     },
-        //role         : { type: String, enum: ['user','admin']               , default: 'user'},
+        //role         : { type: String, enum: ['streamer','']               , default: 'user'},
         isAdmin      : { type: Boolean, default: false},
         status       : { type: String, enum: ['active','inactive','delete'] , default: 'inactive'},
         name         : String,

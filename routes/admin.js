@@ -2,6 +2,13 @@ var User = require('../model/user');
 
 module.exports = function (app, passport){
 
+    
+    app.get('/cthulhu', isAdmin, (req,res) => {
+        User.find({}, function(err, users){
+            res.render('./admin/adminPanel.ejs', {users: users})
+        })
+    })
+
     app.get('/cthulhu/addUser',function(req,res){
         console.log('[!] User created');
         res.render('./admin/addUser.ejs')
@@ -19,15 +26,15 @@ module.exports = function (app, passport){
         });
     });
 
-    app.get('/cthulhu/allUsers',function(req,res){
-        console.log('[!] all Users loaded');
-        User.find({}, function(err, users){
-            res.render('./admin/allUser.ejs', {users: users})
-        })
-    });
-
     app.post('/cthulhu/addUser',function(req,res){
 
     })
 
+}
+
+// middleware to check if user is admin
+function isAdmin(req,res,next) {
+    if (req.user.isAdmin === true)
+        return next();
+    res.redirect('/profile');
 }

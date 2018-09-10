@@ -12,16 +12,16 @@ First of all - many thanks to @stefan0uh
 - [x] show
 - [x] delete
 - [x] add
-- [ ] from User
-- [ ] create date
+- [X] from User
+- [X] create date
 - [ ] testing
 
 #### Comment   
 - [x] show
 - [x] delete
 - [x] add
-- [ ] from User
-- [ ] create date
+- [X] from User
+- [X] create date
 - [ ] testing
 
 #### Usermanagment
@@ -29,6 +29,7 @@ First of all - many thanks to @stefan0uh
 - [-] Password Handling
 - [-] Security & Access & Permissions
 - [x] Userprofil
+- [ ] Role definition
 
 #### Admin Env
 - [ ] Create Admin User on App start

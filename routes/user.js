@@ -135,10 +135,6 @@ module.exports = function(app, passport){
             }
         })
     })
-
-    app.get('/cthulhu', isAdmin, (req,res) => {
-        res.render('admin/adminPanel.ejs')
-    })
 }
 
 // route middleware to make sure a user is logged in
@@ -151,9 +147,3 @@ function isLoggedIn(req, res, next) {
     // if they aren't redirect them to the home page
     res.redirect('/');
 };
-
-function isAdmin(req,res,next) {
-    if (req.user.isAdmin === true)
-        return next();
-    res.redirect('/profile');
-}

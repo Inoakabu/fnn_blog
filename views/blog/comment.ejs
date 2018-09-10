@@ -1,6 +1,8 @@
 <div class="comment">
         <div>
             <p><%= comment.comment %></p>
+            <p> posted: <%= comment.postingDate %></p>
+            <p> posted by: <%= comment.postedBy %></p>
         </div>
     <%if (isLoggedIn) { %>
     <div class="comment-helper">
