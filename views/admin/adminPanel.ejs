@@ -1,8 +1,12 @@
-<strong>Admin Panel</strong>
+<h1>Admin Panel</h1>
+<a href="/">Back to Page</a>
 <body>
-    <% users.forEach(function (user) { %>
-        <li>
-            <h1><%= user.local.email %></h1>
-        </li>
-    <% }) %>
+    <h3>Add a new User</h3>
+    <% include addUser %><br>
+    <h3>All Users</h3>
+    <div class="flex">
+        <% user.forEach(function (user) { %>
+            <%- include('userList',{user: user}); %>
+        <% }) %>
+    </div>
 </body>

@@ -1,12 +1,13 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const config = require('./config/config.json');
-const ObjectID = require('mongodb').ObjectID
-const mongoose = require('mongoose');
-const passport = require('passport');
-const session = require('express-session');
-const checkAuth = require('./routes/user').isAuthenticated;
+const express       = require('express');
+const app           = express();
+const bodyParser    = require('body-parser');
+const config        = require('./config/config.json');
+const ObjectID      = require('mongodb').ObjectID
+const mongoose      = require('mongoose');
+const passport      = require('passport');
+const session       = require('express-session');
+const checkAuth     = require('./routes/user').isAuthenticated;
+const isAdmin       = require('./routes/admin').isAdmin
 
 
 let mongoURL = config.db.devCon;
@@ -60,10 +61,10 @@ app.get('/', (req, res) => {
             {
                 $lookup:
                 {
-                    from: 'fnn_blog_comment',
-                    localField: 'uid',
-                    foreignField: 'linkid',
-                    as: 'comments'
+                    from            : 'fnn_blog_comment',
+                    localField      : 'uid',
+                    foreignField    : 'linkid',
+                    as              : 'comments'
                 }
             },
             {
@@ -88,12 +89,12 @@ app.post('/addpost', isLoggedIn, (req, res) => {
     var currentDate = new Date();
     db.collection('fnn_blog')
         .save({
-            blogposttitle:  req.body.blogposttitle,
-            blogpost:       req.body.blogpost,
-            uid:            newHex,
-            postingDate:    currentDate,
-            postedBy:       req.user.name,
-            updated:        false
+            blogposttitle   : req.body.blogposttitle,
+            blogpost        : req.body.blogpost,
+            uid             : newHex,
+            postingDate     : currentDate,
+            postedBy        : req.user.name,
+            updated         : false
         }, (err, result) => {
             if (err) return console.log(err)
             console.log('[*] Info: Post saved')
@@ -103,19 +104,19 @@ app.post('/addpost', isLoggedIn, (req, res) => {
 });
 
 app.post('/addcomment', isLoggedIn, (req, res) => {
-    var objectId = new ObjectID();
-    var originalHex = objectId.toHexString();
-    var newObjectId = new ObjectID.createFromHexString(originalHex);
-    var newHex = newObjectId.toHexString();
-    var currentDate = new Date();
+    var objectId        = new ObjectID();
+    var originalHex     = objectId.toHexString();
+    var newObjectId     = new ObjectID.createFromHexString(originalHex);
+    var newHex          = newObjectId.toHexString();
+    var currentDate     = new Date();
     db.collection('fnn_blog_comment')
         .save({
-            comment:        req.body.comment,
-            commentid:      newHex,
-            linkid:         req.body.uid,
-            postingDate:    currentDate,
-            postedBy:       req.user.name,
-            updated:        false
+            comment         : req.body.comment,
+            commentid       : newHex,
+            linkid          : req.body.uid,
+            postingDate     : currentDate,
+            postedBy        : req.user.name,
+            updated         : false
         }, (err, result) => {
             if (err) return console.log(err)
 
@@ -133,9 +134,9 @@ app.post('/updatePost', isLoggedIn, (req, res) => {
                 uid: req.body.findBlogPost //query, lookup
             }, {
                 $set: {
-                    blogposttitle:  req.body.replaceBlogPostTitle,
-                    blogpost:       req.body.replaceBlogPost,
-                    updated:        true
+                    blogposttitle   : req.body.replaceBlogPostTitle,
+                    blogpost        : req.body.replaceBlogPost,
+                    updated         : true
                 } // update statement
             },
             (err, result) => {
@@ -154,8 +155,8 @@ app.post('/updateComment', isLoggedIn, (req, res) => {
                 commentid: req.body.findComment //query, lookup
             }, {
                 $set: {
-                    comment: req.body.replaceComment,
-                    updated: true
+                    comment     : req.body.replaceComment,
+                    updated     : true
                 } // update statement
             },
             (err, result) => {
@@ -213,9 +214,4 @@ function isLoggedIn(req, res, next) {
     // if they aren't redirect them to the home page
     console.log('You are not authenticated, please login')
     res.redirect('/');
-};
-function isAdmin(req,res,next) {
-    if (req.user.isAdmin === true)
-        return next();
-    res.redirect('/profile');
 };

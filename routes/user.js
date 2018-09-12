@@ -1,5 +1,6 @@
-var User    = require('../model/user');
-var crypto = require('crypto');
+var User        = require('../model/user');
+var crypto      = require('crypto');
+//var isAdmin     = require('../routes/admin').isAdmin;
 
 module.exports = function(app, passport){
 
@@ -14,7 +15,7 @@ module.exports = function(app, passport){
         res.render('./user/signup.ejs');
     });
 
-    app.get('/profile', isLoggedIn, function(req,res){
+    app.get('/profile', isLoggedIn, /*isAdmin,*/ function(req,res){
         
         res.render('./user/profile.ejs',{
             user : req.user //get User from session
@@ -35,8 +36,8 @@ module.exports = function(app, passport){
 
     app.get('/renewPassword/:id/:token', isLoggedIn, function(req,res){
         User.findOne({ _id : req.params.id
-                    , resetPasswordToken : req.params.token
-                    , resetPasswordExpires : { $gt: Date.now() } }, function(err,user){
+                    , resetPasswordToken    : req.params.token
+                    , resetPasswordExpires  : { $gt: Date.now() } }, function(err,user){
                         //console.log(user);
                         if(!user){
                             console.log('[!] error - No reset token found or expired');
@@ -72,8 +73,7 @@ module.exports = function(app, passport){
         return User.findById(req.params.id, function(err, user){
             user.name           = req.body.nameEdit;
             user.lastName       = req.body.lastNameEdit;
-            user.department     = req.body.departmentEdit;
-            user.companyId      = req.body.companyIdEdit;
+            user.nickname       = req.body.nicknameEdit;
             user.isAdmin        = req.body.isAdminEdit;
  
             return user.save(function(err){
@@ -91,8 +91,8 @@ module.exports = function(app, passport){
 
         return User.findById(req.params.id, function(err, user){
 
-            user.resetPasswordToken = crypto.randomBytes(20).toString('hex');
-            user.resetPasswordExpires = Date.now() + 360000;
+            user.resetPasswordToken     = crypto.randomBytes(20).toString('hex');
+            user.resetPasswordExpires   = Date.now() + 360000;
             
             let redirectURL = '/renewPassword/' + req.params.id + '/' + user.resetPasswordToken
             return user.save(function(err){
@@ -109,12 +109,13 @@ module.exports = function(app, passport){
     app.post('/renewPassword/:id/:token', isLoggedIn, function(req,res){
         User.findOne(
             { _id : req.params.id
-            , resetPasswordToken : req.params.token
-            , resetPasswordExpires : { $gt: Date.now() } }, function(err,user){
+            , resetPasswordToken    : req.params.token
+            , resetPasswordExpires  : { $gt: Date.now() } }, function(err,user){
             
                 let redirectURL = '/renewPassword/' + req.params.id + '/' + req.params.token
                 let password    = req.body.oldPassword;
                 let newPassword = req.body.newPassword;
+                
             if(!user.validPassword(password)){
                 console.log('[!] old password not matching');
                 res.redirect(redirectURL);

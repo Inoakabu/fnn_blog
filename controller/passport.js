@@ -1,5 +1,4 @@
 var LocalStrategy   = require('passport-local').Strategy;
-
 var User            = require('../model/user'); 
 
 module.exports = function(passport){
@@ -36,8 +35,8 @@ module.exports = function(passport){
                 console.log('[!] hitting signup routin')
                 var newUser = new User();
                 
-                newUser.local.email = email;
-                newUser.local.password = newUser.generateHash(password);
+                newUser.local.email     = email;
+                newUser.local.password  = newUser.generateHash(password);
                 newUser.name            = 'Name goes here';
                 newUser.lastName        = 'last name goes here';
                 newUser.department      = 'department goes here';

@@ -1,0 +1,14 @@
+<div class="user">
+    <div>
+        <p>UID: <%= user.uid %></p>
+        <p>E-Mail: <%= user.local.email %></p>
+        <p>Nickname: <%= user.nickname %></p>
+        <!-- <p><%= user.nickname %></p> -->
+    </div>
+    <div class="user-helper">
+        <div class="flex">
+            <%- include('deleteUser', {user: user}); %>
+            <%- include('editUser',{user: user}); %>
+        </div>
+    </div>
+</div>

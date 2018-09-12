@@ -4,8 +4,7 @@
         
             <div class="page-header text-center">
                 <h1><span class="fa fa-anchor"></span> Profile Page</h1>
-                <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-                <a href="/profile" class="btn btn-default btn-sm">back to profile</a>
+                <a href="/cthulhu" class="btn btn-default btn-sm">Back to Admin Panel</a>
             </div>
         
             <div class="row">
@@ -22,23 +21,22 @@
         
                     </div>
                 </div>
-                <form action="/profile/editProfile/<%= user._id %>" method="POST">
+                <form action="/cthulhu/editUser/<%= user._id %>" method="POST">
                     <div class="form-group">
-                        <label>Full name</label>
-                        <input type="text" class="form-control" name="nameEdit" value=<%= user.name %>>
-                        <input type="text" class="form-control" name="lastNameEdit" value=<%= user.lastName %>>
+                        <label>User Role:</label>
+                        <input type="text" class="form-control" name="roleEdit" value=<%= user.role %>>
                     </div>
                     <div class="form-group">
-                        <label>Nickname</label>
-                        <input type="text" class="form-control" name="nicknameEdit">
+                        <label>User Status:</label>
+                        <input type="text" class="form-control" name="statusEdit" value=<%= user.status %>>
                     </div>
                     <div class="form-group">
-                        <label>is Admin</label>
-                        <input type="text" class="form-control" name="isAdminEdit", value="true">
+                        <label>User is Admin:</label>
+                        <input type="text" class="form-control" name="isAdminEdit", value=<%= user.isAdmin %>>
                     </div>
 
             
-                    <button href="/profile" type="submit" class="btn btn-warning btn-lg">Submit</button>
+                    <button href="/cthulhu" type="submit" class="btn btn-warning btn-lg">Update</button>
                 </form>
         
             </div>
