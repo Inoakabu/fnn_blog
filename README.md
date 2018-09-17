@@ -12,7 +12,7 @@ First of all - many thanks to @stefan0uh
 - [x] show
 - [x] delete
 - [x] add
-- [X] from User
+- [X] from User (change to User UID)
 - [X] create date
 - [ ] testing
 
@@ -20,7 +20,7 @@ First of all - many thanks to @stefan0uh
 - [x] show
 - [x] delete
 - [x] add
-- [X] from User
+- [X] from User (change to User UID)
 - [X] create date
 - [ ] testing
 
